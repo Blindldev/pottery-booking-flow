@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     port: 3007
   },
-  base: '/',
+  base: '/pottery-booking-flow/',
   build: {
     outDir: 'dist',
     assetsDir: 'assets'
