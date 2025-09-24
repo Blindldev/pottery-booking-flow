@@ -36,7 +36,36 @@ A multi-step booking form for PotteryChicago's private party and corporate event
    npm run dev
    ```
 
-3. Open your browser to `http://localhost:3000`
+3. Open your browser to `http://localhost:3007`
+
+## Deployment to GitHub Pages
+
+This project is configured for automatic deployment to GitHub Pages.
+
+### Setup Instructions
+
+1. **Create a GitHub repository** and push your code
+2. **Enable GitHub Pages**:
+   - Go to your repository settings
+   - Navigate to "Pages" section
+   - Source: "GitHub Actions"
+3. **Configure your custom domain** (optional):
+   - Create a `CNAME` file in the `public/` directory
+   - Add your domain name to the file
+   - Configure DNS settings with your domain provider
+
+### Automatic Deployment
+
+The project uses GitHub Actions for automatic deployment:
+- Every push to `main` branch triggers a deployment
+- The workflow builds the project and deploys to GitHub Pages
+- Your site will be available at `https://yourusername.github.io/pottery-booking-flow/`
+
+### Manual Deployment
+
+```bash
+npm run deploy
+```
 
 ## Project Structure
 

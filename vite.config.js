@@ -5,5 +5,10 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3007
+  },
+  base: process.env.NODE_ENV === 'production' ? '/pottery-booking-flow/' : '/',
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets'
   }
 })
