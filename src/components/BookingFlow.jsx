@@ -356,13 +356,13 @@ function BookingFlow() {
         </div>
         </div>
         <h2 id={`step-${STEPS[currentStep].id}`} className="step-title">{STEPS[currentStep].title}</h2>
-        {currentStep === 0 && <p className="step-subtitle">🎭 Choose one to help us tailor the perfect pottery experience.</p>}
+        {currentStep === 0 && <p className="step-subtitle">Choose one to help us tailor the perfect pottery experience.</p>}
         {currentStep === 1 && <p className="step-subtitle">Please provide an estimated group size</p>}
-        {currentStep === 2 && <p className="step-subtitle">📍 Choose our studio or we'll come to your location!</p>}
-        {currentStep === 3 && <p className="step-subtitle">⚡ Select all offerings you are interesed in, we'll narrow down to one later!</p>}
-        {currentStep === 4 && <p className="step-subtitle">📅 Being flexible with your dates helps us work you into the studio schedule. If you want specific times or have special requests, please leave notes.</p>}
-        {currentStep === 5 && <p className="step-subtitle">📝 Tell us how to reach you for your pottery adventure.</p>}
-        {currentStep === 6 && <p className="step-subtitle">✨ Almost ready to create! Let's review your pottery journey.</p>}
+        {currentStep === 2 && <p className="step-subtitle">Choose our studio or we'll come to your location!</p>}
+        {currentStep === 3 && <p className="step-subtitle">Select all offerings you are interesed in, we'll narrow down to one later!</p>}
+        {currentStep === 4 && <p className="step-subtitle">Being flexible with your dates helps us work you into the studio schedule. If you want specific times or have special requests, please leave notes.</p>}
+        {currentStep === 5 && <p className="step-subtitle">Tell us how to reach you for your pottery adventure.</p>}
+        {currentStep === 6 && <p className="step-subtitle">Almost ready to create! Let's review your pottery journey.</p>}
       </div>
 
       <div className="step-content">
