@@ -34,7 +34,7 @@ function App() {
         className="back-to-landing-btn"
         aria-label="Back to home"
       >
-        ← Back
+        ‹
       </button>
       <header className="app-header">
         <h1>PotteryChicago</h1>

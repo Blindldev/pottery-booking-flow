@@ -93,6 +93,8 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   position: relative;
   overflow: hidden;
+  width: 100%;
+  text-align: left;
 }
 
 .link-card::before {
@@ -129,6 +131,10 @@
   text-align: left;
   padding: 0;
   background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .link-card-content {
