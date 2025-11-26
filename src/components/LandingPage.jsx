@@ -23,27 +23,35 @@ function LandingPage({ onStartBooking, onStudio24Hour }) {
             <div className="link-arrow">→</div>
           </a>
 
-          <button 
-            onClick={onStartBooking}
-            className="link-card link-card-button"
+          <a 
+            href="#"
+            onClick={(e) => {
+              e.preventDefault()
+              onStartBooking()
+            }}
+            className="link-card"
           >
             <div className="link-card-content">
               <h2 className="link-title">Private Bookings!</h2>
               <p className="link-subtitle">Let us know about your Bachelorette, birthday, corporate event or other!</p>
             </div>
             <div className="link-arrow">→</div>
-          </button>
+          </a>
 
-          <button 
-            onClick={onStudio24Hour}
-            className="link-card link-card-button"
+          <a 
+            href="#"
+            onClick={(e) => {
+              e.preventDefault()
+              onStudio24Hour()
+            }}
+            className="link-card"
           >
             <div className="link-card-content">
               <h2 className="link-title">24 Hour Open Studio</h2>
               <p className="link-subtitle"></p>
             </div>
             <div className="link-arrow">→</div>
-          </button>
+          </a>
 
           <a 
             href="https://ThePotteryLoop.com/Pickup" 
