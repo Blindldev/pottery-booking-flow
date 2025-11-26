@@ -7,6 +7,7 @@ function LandingPage({ onStartBooking, onStudio24Hour }) {
       <div className="landing-container">
         <header className="landing-header">
           <h1 className="landing-title">PotteryChicago</h1>
+          <p className="landing-subtitle">Building a Community Around Pottery in Chicago</p>
         </header>
         
         <div className="links-grid">
