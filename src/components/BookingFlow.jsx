@@ -105,6 +105,22 @@ function BookingFlow() {
     }
   }, [])
 
+  // Auto-save state whenever formData, currentStep, errors, or isSubmitted changes
+  useEffect(() => {
+    // Skip saving on initial mount (state is already loaded from localStorage)
+    const isInitialMount = currentStep === 0 && 
+                          (!formData.eventTypes || formData.eventTypes.length === 0) && 
+                          !formData.contact.name &&
+                          !formData.venue
+    
+    if (isInitialMount) {
+      return
+    }
+    
+    saveState(formData, currentStep, errors, isSubmitted)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData, currentStep, errors, isSubmitted])
+
   // Save state to localStorage
   const saveState = (newFormData, newCurrentStep, newErrors, newIsSubmitted) => {
     try {
