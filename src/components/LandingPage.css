@@ -143,8 +143,20 @@
   background-image: url('https://i.imgur.com/LM0J22x.png');
 }
 
+.link-card-24hour {
+  background-image: url('https://i.imgur.com/C44BGMQ.png');
+}
+
+.link-card-pickup {
+  background-image: url('https://i.imgur.com/ZLO1yBq.png');
+}
+
 .link-card-instructor-positions {
   background-image: url('https://i.imgur.com/OKbk0EV.png');
+}
+
+.link-card-blind-date {
+  background-image: url('https://i.imgur.com/33kmb4n.png');
 }
 
 .link-card-contact {

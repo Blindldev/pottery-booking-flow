@@ -44,7 +44,7 @@ function LandingPage({ onStartBooking, onStudio24Hour }) {
               e.preventDefault()
               onStudio24Hour()
             }}
-            className="link-card"
+            className="link-card link-card-24hour"
           >
             <div className="link-card-content">
               <h2 className="link-title">24 Hour Open Studio</h2>
@@ -57,7 +57,7 @@ function LandingPage({ onStartBooking, onStudio24Hour }) {
             href="https://ThePotteryLoop.com/Pickup" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="link-card"
+            className="link-card link-card-pickup"
           >
             <div className="link-card-content">
               <h2 className="link-title">Pickup</h2>
@@ -83,7 +83,7 @@ function LandingPage({ onStartBooking, onStudio24Hour }) {
             href="https://forms.fillout.com/t/fgJYcLiHgWus" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="link-card"
+            className="link-card link-card-blind-date"
           >
             <div className="link-card-content">
               <h2 className="link-title">Blind Date Pottery Application</h2>
