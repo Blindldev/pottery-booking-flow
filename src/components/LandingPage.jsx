@@ -90,6 +90,19 @@ function LandingPage() {
             href="https://ThePotteryLoop.com/Contact" 
             target="_blank" 
             rel="noopener noreferrer"
+            className="link-card link-card-collaborations"
+          >
+            <div className="link-card-content">
+              <h2 className="link-title">Collaborations</h2>
+              <p className="link-subtitle">Host groups in chicago? We would love to connect!</p>
+            </div>
+            <div className="link-arrow">→</div>
+          </a>
+
+          <a 
+            href="https://ThePotteryLoop.com/Contact" 
+            target="_blank" 
+            rel="noopener noreferrer"
             className="link-card link-card-contact"
           >
             <div className="link-card-content">
