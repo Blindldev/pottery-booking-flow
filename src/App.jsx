@@ -15,7 +15,7 @@ function BookingPage() {
         className="back-to-landing-btn"
         aria-label="Back to home"
       >
-        ‹
+        BACK
       </button>
       <header className="app-header">
         <h1>PotteryChicago</h1>

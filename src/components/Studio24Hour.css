@@ -26,19 +26,18 @@
   background: transparent;
   border: none;
   color: var(--color-text-muted);
-  padding: 0.5rem;
-  border-radius: 50%;
-  font-size: 1.25rem;
-  font-weight: 300;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: inherit;
-  width: 36px;
-  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
+  letter-spacing: 0.5px;
 }
 
 .back-btn-studio:hover {

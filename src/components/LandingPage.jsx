@@ -48,7 +48,7 @@ function LandingPage() {
           </Link>
 
           <a 
-            href="https://ThePotteryLoop.com/Pickup" 
+            href="https://www.thepotteryloop.com/booking-calendar/pottery-pickup" 
             target="_blank" 
             rel="noopener noreferrer"
             className="link-card link-card-pickup"

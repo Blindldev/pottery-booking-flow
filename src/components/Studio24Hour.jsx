@@ -31,7 +31,7 @@ function Studio24Hour({ onBack }) {
   if (hasTakenCourse === false) {
     return (
       <div className="studio-24-container">
-        <button onClick={onBack} className="back-btn-studio">‹</button>
+        <button onClick={onBack} className="back-btn-studio">BACK</button>
         <div className="studio-24-card">
           <h2>24/7 Studio Access</h2>
           <div className="notice-box">
@@ -53,7 +53,7 @@ function Studio24Hour({ onBack }) {
   if (hasTakenCourse === true) {
     return (
       <div className="studio-24-container">
-        <button onClick={() => setHasTakenCourse(null)} className="back-btn-studio">‹</button>
+        <button onClick={() => setHasTakenCourse(null)} className="back-btn-studio">BACK</button>
         <div className="studio-24-card">
           <h2>24/7 Studio Access</h2>
           <p className="subtitle">Join the waitlist for 24/7 studio access</p>
@@ -92,11 +92,11 @@ function Studio24Hour({ onBack }) {
   }
 
   return (
-    <div className="studio-24-container">
-      <button onClick={onBack} className="back-btn-studio">‹</button>
-      <div className="studio-24-card">
-        <h2>24/7 Studio Access</h2>
-        <p className="subtitle">Have you taken a course with us?</p>
+      <div className="studio-24-container">
+        <button onClick={onBack} className="back-btn-studio">BACK</button>
+        <div className="studio-24-card">
+          <h2>24/7 Studio Access</h2>
+          <p className="subtitle">Have you taken a course with us?</p>
         <div className="button-group">
           <button 
             onClick={() => setHasTakenCourse(true)}
