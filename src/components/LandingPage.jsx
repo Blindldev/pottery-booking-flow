@@ -60,10 +60,8 @@ function LandingPage() {
             <div className="link-arrow">→</div>
           </a>
 
-          <a 
-            href="https://forms.fillout.com/t/t665DF9ogLus" 
-            target="_blank" 
-            rel="noopener noreferrer"
+          <Link 
+            to="/teach"
             className="link-card link-card-instructor-positions"
           >
             <div className="link-card-content">
@@ -71,7 +69,7 @@ function LandingPage() {
               <p className="link-subtitle"></p>
             </div>
             <div className="link-arrow">→</div>
-          </a>
+          </Link>
 
           <a 
             href="https://forms.fillout.com/t/fgJYcLiHgWus" 

@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 import LandingPage from './components/LandingPage'
 import BookingFlow from './components/BookingFlow'
 import Studio24Hour from './components/Studio24Hour'
+import InstructorApplication from './components/InstructorApplication'
 import './App.css'
 
 function BookingPage() {
@@ -34,12 +35,19 @@ function Studio24Page() {
   return <Studio24Hour onBack={() => navigate('/')} />
 }
 
+function TeachPage() {
+  const navigate = useNavigate()
+
+  return <InstructorApplication onBack={() => navigate('/')} />
+}
+
 function App() {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/private-bookings" element={<BookingPage />} />
       <Route path="/open-studio" element={<Studio24Page />} />
+      <Route path="/teach" element={<TeachPage />} />
     </Routes>
   )
 }
