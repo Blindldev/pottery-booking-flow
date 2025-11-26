@@ -121,7 +121,7 @@ function InstructorApplication({ onBack }) {
                 value={formData.name}
                 onChange={(e) => updateFormData('name', e.target.value)}
                 className={`form-input ${errors.name ? 'error' : ''}`}
-                placeholder="John Smith"
+                placeholder="Your Name"
               />
               {errors.name && <div className="error-message">{errors.name}</div>}
             </div>
@@ -133,7 +133,7 @@ function InstructorApplication({ onBack }) {
                 value={formData.email}
                 onChange={(e) => updateFormData('email', e.target.value)}
                 className={`form-input ${errors.email ? 'error' : ''}`}
-                placeholder="your.email@example.com"
+                placeholder="you@email.com"
               />
               {errors.email && <div className="error-message">{errors.email}</div>}
             </div>

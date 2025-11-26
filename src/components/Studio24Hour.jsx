@@ -6,6 +6,7 @@ function Studio24Hour({ onBack }) {
   const [email, setEmail] = useState('')
   const [courseDate, setCourseDate] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const [showWaitlistInfo, setShowWaitlistInfo] = useState(false)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -86,6 +87,17 @@ function Studio24Hour({ onBack }) {
               Join Waitlist
             </button>
           </form>
+          <button 
+            onClick={() => setShowWaitlistInfo(!showWaitlistInfo)}
+            className="btn-waitlist-check"
+          >
+            Already on the waitlist?
+          </button>
+          {showWaitlistInfo && (
+            <div className="waitlist-info-box">
+              <p>Send us a small email and we can let you know approx where you are in the waitlist!</p>
+            </div>
+          )}
         </div>
       </div>
     )
@@ -111,6 +123,17 @@ function Studio24Hour({ onBack }) {
             No
           </button>
         </div>
+        <button 
+          onClick={() => setShowWaitlistInfo(!showWaitlistInfo)}
+          className="btn-waitlist-check"
+        >
+          Already on the waitlist?
+        </button>
+        {showWaitlistInfo && (
+          <div className="waitlist-info-box">
+            <p>Send us a small email and we can let you know approx where you are in the waitlist!</p>
+          </div>
+        )}
       </div>
     </div>
   )
