@@ -92,11 +92,33 @@ function Studio24Hour({ onBack }) {
           >
             Already on the waitlist?
           </button>
-          {showWaitlistInfo && (
-            <div className="waitlist-info-box">
-              <p>Send us a small email and we can let you know approx where you are in the waitlist!</p>
-            </div>
-          )}
+          {showWaitlistInfo && (() => {
+            const getNameFromEmail = (email) => {
+              if (!email) return 'Your Name'
+              const username = email.split('@')[0]
+              // Format name: capitalize first letter of each word, replace dots/underscores with spaces
+              return username
+                .split(/[._]/)
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                .join(' ')
+            }
+            const userName = getNameFromEmail(email)
+            const emailBody = `Hi Mike,%0D%0A%0D%0ACould you please let me know about my status on the open studio Waitlist!%0D%0A%0D%0ABest,%0D%0A${userName}`
+            return (
+              <div className="waitlist-info-box">
+                <p>
+                  Send us a{' '}
+                  <a 
+                    href={`mailto:PotteryChicago@gmail.com?subject=Open Studio Waitlist Status&body=${emailBody}`}
+                    className="email-link"
+                  >
+                    small email
+                  </a>
+                  {' '}and we can let you know approx where you are in the waitlist!
+                </p>
+              </div>
+            )
+          })()}
           <button onClick={() => setHasTakenCourse(null)} className="btn-back">
             ← Back
           </button>
@@ -124,17 +146,6 @@ function Studio24Hour({ onBack }) {
             No
           </button>
         </div>
-        <button 
-          onClick={() => setShowWaitlistInfo(!showWaitlistInfo)}
-          className="btn-waitlist-check"
-        >
-          Already on the waitlist?
-        </button>
-        {showWaitlistInfo && (
-          <div className="waitlist-info-box">
-            <p>Send us a small email and we can let you know approx where you are in the waitlist!</p>
-          </div>
-        )}
         <button onClick={onBack} className="btn-back">
           ← Back
         </button>
