@@ -109,13 +109,13 @@
   right: 0;
   bottom: 0;
   background: var(--color-surface);
-  opacity: 0.85;
+  opacity: 0.5;
   z-index: 0;
   transition: opacity 0.3s ease;
 }
 
 .link-card:hover::after {
-  opacity: 0.75;
+  opacity: 0.4;
 }
 
 .link-card-content,
