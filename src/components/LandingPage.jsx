@@ -1,7 +1,7 @@
 import React from 'react'
 import './LandingPage.css'
 
-function LandingPage({ onStartBooking }) {
+function LandingPage({ onStartBooking, onStudio24Hour }) {
   return (
     <div className="landing-page">
       <div className="landing-container">
@@ -34,6 +34,17 @@ function LandingPage({ onStartBooking }) {
             <div className="link-arrow">→</div>
           </button>
 
+          <button 
+            onClick={onStudio24Hour}
+            className="link-card link-card-button"
+          >
+            <div className="link-card-content">
+              <h2 className="link-title">24 Hour Open Studio</h2>
+              <p className="link-subtitle"></p>
+            </div>
+            <div className="link-arrow">→</div>
+          </button>
+
           <a 
             href="https://ThePotteryLoop.com/Pickup" 
             target="_blank" 
@@ -42,6 +53,32 @@ function LandingPage({ onStartBooking }) {
           >
             <div className="link-card-content">
               <h2 className="link-title">Pickup</h2>
+              <p className="link-subtitle"></p>
+            </div>
+            <div className="link-arrow">→</div>
+          </a>
+
+          <a 
+            href="https://forms.fillout.com/t/t665DF9ogLus" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="link-card"
+          >
+            <div className="link-card-content">
+              <h2 className="link-title">Instructor Positions</h2>
+              <p className="link-subtitle"></p>
+            </div>
+            <div className="link-arrow">→</div>
+          </a>
+
+          <a 
+            href="https://forms.fillout.com/t/fgJYcLiHgWus" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="link-card"
+          >
+            <div className="link-card-content">
+              <h2 className="link-title">Blind Date Pottery Application</h2>
               <p className="link-subtitle"></p>
             </div>
             <div className="link-arrow">→</div>

@@ -1,21 +1,30 @@
 import React, { useState } from 'react'
 import LandingPage from './components/LandingPage'
 import BookingFlow from './components/BookingFlow'
+import Studio24Hour from './components/Studio24Hour'
 import './App.css'
 
 function App() {
-  const [showBooking, setShowBooking] = useState(false)
+  const [currentView, setCurrentView] = useState('landing') // 'landing', 'booking', 'studio24'
 
   const handleStartBooking = () => {
-    setShowBooking(true)
+    setCurrentView('booking')
+  }
+
+  const handleStudio24Hour = () => {
+    setCurrentView('studio24')
   }
 
   const handleBackToLanding = () => {
-    setShowBooking(false)
+    setCurrentView('landing')
   }
 
-  if (!showBooking) {
-    return <LandingPage onStartBooking={handleStartBooking} />
+  if (currentView === 'landing') {
+    return <LandingPage onStartBooking={handleStartBooking} onStudio24Hour={handleStudio24Hour} />
+  }
+
+  if (currentView === 'studio24') {
+    return <Studio24Hour onBack={handleBackToLanding} />
   }
 
   return (
