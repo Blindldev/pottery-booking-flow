@@ -29,7 +29,7 @@ function LandingPage({ onStartBooking, onStudio24Hour }) {
               e.preventDefault()
               onStartBooking()
             }}
-            className="link-card"
+            className="link-card link-card-private-bookings"
           >
             <div className="link-card-content">
               <h2 className="link-title">Private Bookings!</h2>
