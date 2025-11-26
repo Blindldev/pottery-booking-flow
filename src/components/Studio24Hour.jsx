@@ -31,8 +31,8 @@ function Studio24Hour({ onBack }) {
   if (hasTakenCourse === false) {
     return (
       <div className="studio-24-container">
+        <button onClick={onBack} className="back-btn-studio">‹</button>
         <div className="studio-24-card">
-          <button onClick={onBack} className="back-btn" aria-label="Back">‹</button>
           <h2>24/7 Studio Access</h2>
           <div className="notice-box">
             <p className="notice-text">
@@ -53,8 +53,8 @@ function Studio24Hour({ onBack }) {
   if (hasTakenCourse === true) {
     return (
       <div className="studio-24-container">
+        <button onClick={() => setHasTakenCourse(null)} className="back-btn-studio">‹</button>
         <div className="studio-24-card">
-          <button onClick={() => setHasTakenCourse(null)} className="back-btn" aria-label="Back">‹</button>
           <h2>24/7 Studio Access</h2>
           <p className="subtitle">Join the waitlist for 24/7 studio access</p>
           <form onSubmit={handleSubmit} className="waitlist-form">
@@ -93,8 +93,8 @@ function Studio24Hour({ onBack }) {
 
   return (
     <div className="studio-24-container">
+      <button onClick={onBack} className="back-btn-studio">‹</button>
       <div className="studio-24-card">
-        <button onClick={onBack} className="back-btn">← Back</button>
         <h2>24/7 Studio Access</h2>
         <p className="subtitle">Have you taken a course with us?</p>
         <div className="button-group">

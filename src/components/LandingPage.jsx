@@ -94,7 +94,7 @@ function LandingPage() {
           >
             <div className="link-card-content">
               <h2 className="link-title">Collaborations</h2>
-              <p className="link-subtitle">Host groups in chicago? We would love to connect!</p>
+              <p className="link-subtitle">Host groups in chicago? Have a social following or community? We would love to connect!</p>
             </div>
             <div className="link-arrow">→</div>
           </a>

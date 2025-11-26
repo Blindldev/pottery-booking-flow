@@ -18,10 +18,11 @@
   position: relative;
 }
 
-.back-btn {
+.back-btn-studio {
   position: absolute;
   top: 1.5rem;
   left: 1.5rem;
+  z-index: 10;
   background: transparent;
   border: none;
   color: var(--color-text-muted);
@@ -38,10 +39,9 @@
   align-items: center;
   justify-content: center;
   line-height: 1;
-  z-index: 1;
 }
 
-.back-btn:hover {
+.back-btn-studio:hover {
   background: rgba(197, 106, 70, 0.1);
   color: var(--color-accent-primary);
   transform: translateX(-2px);
@@ -53,7 +53,7 @@
   color: var(--color-text-main);
   margin: 0.5rem 0 0.5rem 0;
   text-align: center;
-  padding-top: 0.5rem;
+  padding-top: 0;
 }
 
 .subtitle {
