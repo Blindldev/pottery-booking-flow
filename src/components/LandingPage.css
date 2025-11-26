@@ -109,13 +109,13 @@
   right: 0;
   bottom: 0;
   background: var(--color-surface);
-  opacity: 0.5;
+  opacity: 0.3;
   z-index: 0;
   transition: opacity 0.3s ease;
 }
 
 .link-card:hover::after {
-  opacity: 0.4;
+  opacity: 0.25;
 }
 
 .link-card-content,
@@ -143,6 +143,14 @@
   background-image: url('https://i.imgur.com/LM0J22x.png');
 }
 
+.link-card-instructor-positions {
+  background-image: url('https://i.imgur.com/OKbk0EV.png');
+}
+
+.link-card-contact {
+  background-image: url('https://i.imgur.com/FR3fyYb.png');
+}
+
 .link-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 20px rgba(197, 106, 70, 0.12);
@@ -167,7 +175,7 @@
 
 .link-title {
   font-size: 1.25rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-text-main);
   margin: 0;
   line-height: 1.3;
@@ -177,7 +185,8 @@
 
 .link-subtitle {
   font-size: 0.95rem;
-  color: var(--color-text-muted);
+  font-weight: 500;
+  color: var(--color-text-main);
   margin: 0.5rem 0 0 0;
   line-height: 1.4;
   text-align: left;

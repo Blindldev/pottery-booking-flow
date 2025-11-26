@@ -70,7 +70,7 @@ function LandingPage({ onStartBooking, onStudio24Hour }) {
             href="https://forms.fillout.com/t/t665DF9ogLus" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="link-card"
+            className="link-card link-card-instructor-positions"
           >
             <div className="link-card-content">
               <h2 className="link-title">Instructor Positions</h2>
@@ -96,7 +96,7 @@ function LandingPage({ onStartBooking, onStudio24Hour }) {
             href="https://ThePotteryLoop.com/Contact" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="link-card"
+            className="link-card link-card-contact"
           >
             <div className="link-card-content">
               <h2 className="link-title">Contact us</h2>
