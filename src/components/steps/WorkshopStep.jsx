@@ -144,6 +144,19 @@ function WorkshopStep({ formData, errors, updateFormData, goToStep }) {
   const availableWorkshops = WORKSHOPS.filter(workshop => {
     const constraint = constraints[workshop.id]
     return constraint !== false // Show if available or if disabled for other reasons
+  }).sort((a, b) => {
+    // Sort by base price for the selected venue (cheapest first)
+    if (!formData.venue) return 0
+    
+    const priceA = calculatePricing(a.id, formData.venue, 8).perPerson // Use base group size for sorting
+    const priceB = calculatePricing(b.id, formData.venue, 8).perPerson
+    
+    if (priceA !== priceB) {
+      return priceA - priceB
+    }
+    
+    // If prices are equal, maintain original order
+    return 0
   })
 
   // Check if any workshops are disabled due to group size limits
