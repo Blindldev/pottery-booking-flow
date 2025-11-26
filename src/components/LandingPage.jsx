@@ -24,32 +24,6 @@ function LandingPage({ onStartBooking, onStudio24Hour }) {
           </a>
 
           <a 
-            href="https://PotteryChicago.com" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="link-card"
-          >
-            <div className="link-card-content">
-              <h2 className="link-title">PotteryChicago</h2>
-              <p className="link-subtitle">Come check out our pottery studio</p>
-            </div>
-            <div className="link-arrow">→</div>
-          </a>
-
-          <a 
-            href="https://PotteryChicago.com" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="link-card"
-          >
-            <div className="link-card-content">
-              <h2 className="link-title">PotteryChicago</h2>
-              <p className="link-subtitle">Come check out our pottery studio</p>
-            </div>
-            <div className="link-arrow">→</div>
-          </a>
-
-          <a 
             href="#"
             onClick={(e) => {
               e.preventDefault()

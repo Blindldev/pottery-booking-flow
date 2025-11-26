@@ -80,6 +80,10 @@
 
 .link-card {
   background: var(--color-surface);
+  background-image: url('https://i.imgur.com/WGgFoCe.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   border: 1px solid var(--color-border);
   border-radius: 18px;
   padding: 1.5rem 1.75rem;
@@ -95,6 +99,29 @@
   overflow: hidden;
   width: 100%;
   text-align: left;
+}
+
+.link-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--color-surface);
+  opacity: 0.85;
+  z-index: 0;
+  transition: opacity 0.3s ease;
+}
+
+.link-card:hover::after {
+  opacity: 0.75;
+}
+
+.link-card-content,
+.link-arrow {
+  position: relative;
+  z-index: 1;
 }
 
 .link-card::before {
