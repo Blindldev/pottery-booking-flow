@@ -1,36 +1,17 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { Routes, Route, useNavigate } from 'react-router-dom'
 import LandingPage from './components/LandingPage'
 import BookingFlow from './components/BookingFlow'
 import Studio24Hour from './components/Studio24Hour'
 import './App.css'
 
-function App() {
-  const [currentView, setCurrentView] = useState('landing') // 'landing', 'booking', 'studio24'
-
-  const handleStartBooking = () => {
-    setCurrentView('booking')
-  }
-
-  const handleStudio24Hour = () => {
-    setCurrentView('studio24')
-  }
-
-  const handleBackToLanding = () => {
-    setCurrentView('landing')
-  }
-
-  if (currentView === 'landing') {
-    return <LandingPage onStartBooking={handleStartBooking} onStudio24Hour={handleStudio24Hour} />
-  }
-
-  if (currentView === 'studio24') {
-    return <Studio24Hour onBack={handleBackToLanding} />
-  }
+function BookingPage() {
+  const navigate = useNavigate()
 
   return (
     <div className="app">
       <button 
-        onClick={handleBackToLanding}
+        onClick={() => navigate('/')}
         className="back-to-landing-btn"
         aria-label="Back to home"
       >
@@ -44,6 +25,22 @@ function App() {
         <BookingFlow />
       </main>
     </div>
+  )
+}
+
+function Studio24Page() {
+  const navigate = useNavigate()
+
+  return <Studio24Hour onBack={() => navigate('/')} />
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/private-bookings" element={<BookingPage />} />
+      <Route path="/open-studio" element={<Studio24Page />} />
+    </Routes>
   )
 }
 

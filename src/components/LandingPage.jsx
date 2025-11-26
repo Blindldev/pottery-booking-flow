@@ -1,7 +1,8 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import './LandingPage.css'
 
-function LandingPage({ onStartBooking, onStudio24Hour }) {
+function LandingPage() {
   return (
     <div className="landing-page">
       <div className="landing-container">
@@ -24,12 +25,8 @@ function LandingPage({ onStartBooking, onStudio24Hour }) {
             <div className="link-arrow">→</div>
           </a>
 
-          <a 
-            href="#"
-            onClick={(e) => {
-              e.preventDefault()
-              onStartBooking()
-            }}
+          <Link 
+            to="/private-bookings"
             className="link-card link-card-private-bookings"
           >
             <div className="link-card-content">
@@ -37,14 +34,10 @@ function LandingPage({ onStartBooking, onStudio24Hour }) {
               <p className="link-subtitle">Let us know about your Bachelorette, birthday, corporate event or other!</p>
             </div>
             <div className="link-arrow">→</div>
-          </a>
+          </Link>
 
-          <a 
-            href="#"
-            onClick={(e) => {
-              e.preventDefault()
-              onStudio24Hour()
-            }}
+          <Link 
+            to="/open-studio"
             className="link-card link-card-24hour"
           >
             <div className="link-card-content">
@@ -52,7 +45,7 @@ function LandingPage({ onStartBooking, onStudio24Hour }) {
               <p className="link-subtitle"></p>
             </div>
             <div className="link-arrow">→</div>
-          </a>
+          </Link>
 
           <a 
             href="https://ThePotteryLoop.com/Pickup" 
