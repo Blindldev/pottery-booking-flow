@@ -117,7 +117,7 @@ function InstructorApplication({ onBack }) {
                 value={formData.name}
                 onChange={(e) => updateFormData('name', e.target.value)}
                 className={`form-input ${errors.name ? 'error' : ''}`}
-                placeholder="Michael Vicente"
+                placeholder="John Smith"
               />
               {errors.name && <div className="error-message">{errors.name}</div>}
             </div>
@@ -129,7 +129,7 @@ function InstructorApplication({ onBack }) {
                 value={formData.email}
                 onChange={(e) => updateFormData('email', e.target.value)}
                 className={`form-input ${errors.email ? 'error' : ''}`}
-                placeholder="PotteryChicago@gmail.com"
+                placeholder="your.email@example.com"
               />
               {errors.email && <div className="error-message">{errors.email}</div>}
             </div>
@@ -158,7 +158,7 @@ function InstructorApplication({ onBack }) {
                   value={formData.phone}
                   onChange={(e) => updateFormData('phone', e.target.value)}
                   className={`form-input ${errors.phone ? 'error' : ''}`}
-                  placeholder="631 559 7922"
+                  placeholder="(555) 123-4567"
                 />
               </div>
               {errors.phone && <div className="error-message">{errors.phone}</div>}
