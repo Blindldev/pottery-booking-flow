@@ -161,6 +161,47 @@
   background: rgba(197, 106, 70, 0.08);
 }
 
+.checkbox-option {
+  display: flex;
+  align-items: flex-start;
+  padding: 1rem;
+  border: 2px solid var(--color-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--color-bg);
+  gap: 0.75rem;
+}
+
+.checkbox-option:hover {
+  border-color: var(--color-accent-primary);
+  background: rgba(197, 106, 70, 0.05);
+}
+
+.checkbox-option input[type="checkbox"] {
+  margin-top: 0.2rem;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--color-accent-primary);
+  flex-shrink: 0;
+}
+
+.checkbox-option input[type="checkbox"]:checked + span {
+  font-weight: 600;
+  color: var(--color-accent-primary);
+}
+
+.checkbox-option.checked {
+  border-color: var(--color-accent-primary);
+  background: rgba(197, 106, 70, 0.08);
+}
+
+.checkbox-option span {
+  line-height: 1.5;
+  color: var(--color-text-main);
+}
+
 .btn-next {
   width: 100%;
   padding: 1rem 2rem;

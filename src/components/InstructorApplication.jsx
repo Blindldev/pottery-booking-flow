@@ -11,6 +11,7 @@ function InstructorApplication({ onBack }) {
     experience: '',
     experienceDescription: '',
     howFoundOut: '',
+    awarePartTime: false,
     startDate: ''
   })
   const [errors, setErrors] = useState({})
@@ -43,6 +44,9 @@ function InstructorApplication({ onBack }) {
     }
     if (!formData.howFoundOut.trim()) {
       newErrors.howFoundOut = 'Please let us know how you found out about us'
+    }
+    if (!formData.awarePartTime) {
+      newErrors.awarePartTime = 'Please acknowledge that you understand the position is part-time'
     }
     if (!formData.startDate.trim()) {
       newErrors.startDate = 'Please let us know when you can start'
@@ -230,10 +234,24 @@ function InstructorApplication({ onBack }) {
                 onChange={(e) => updateFormData('howFoundOut', e.target.value)}
                 className={`form-input ${errors.howFoundOut ? 'error' : ''}`}
                 rows="3"
-                placeholder="I am aware work here is part time and not consistent (unfortunately) due to it being a small and new studio"
+                placeholder="Was walking from canada to texas and took a pit stop"
               />
               {errors.howFoundOut && (
                 <div className="error-message">{errors.howFoundOut}</div>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label className={`checkbox-option ${formData.awarePartTime ? 'checked' : ''}`}>
+                <input
+                  type="checkbox"
+                  checked={formData.awarePartTime}
+                  onChange={(e) => updateFormData('awarePartTime', e.target.checked)}
+                />
+                <span>I am aware work here is part time and not consistent (unfortunately) due to it being a small and new studio *</span>
+              </label>
+              {errors.awarePartTime && (
+                <div className="error-message">{errors.awarePartTime}</div>
               )}
             </div>
 
