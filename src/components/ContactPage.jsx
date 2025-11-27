@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './ContactPage.css'
 
 function ContactPage({ onBack }) {
   const email = 'PotteryChicago@gmail.com'
   const instagramUrl = 'https://www.instagram.com/potterychicago/'
+  const [copied, setCopied] = useState(false)
 
   return (
     <div className="contact-container">
@@ -42,16 +43,22 @@ function ContactPage({ onBack }) {
           <p className="email-label">Or copy our email address:</p>
           <div className="email-copy-box">
             <span className="email-address">{email}</span>
-            <button
-              onClick={() => {
-                navigator.clipboard.writeText(email)
-                alert('Email address copied to clipboard!')
-              }}
-              className="copy-button"
-              aria-label="Copy email address"
-            >
-              📋
-            </button>
+            <div className="copy-container">
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(email)
+                  setCopied(true)
+                  setTimeout(() => setCopied(false), 2000)
+                }}
+                className="copy-button"
+                aria-label="Copy email address"
+              >
+                📋
+              </button>
+              {copied && (
+                <span className="copy-success">Copied successfully!</span>
+              )}
+            </div>
           </div>
         </div>
       </div>
