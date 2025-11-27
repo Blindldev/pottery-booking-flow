@@ -12,7 +12,7 @@ function JanuaryCourses({ onBack }) {
     },
     {
       day: 'Sundays',
-      image: 'https://i.imgur.com/07bj5iK.png',
+      image: 'https://i.imgur.com/nFvhRD4.png',
       link: 'https://square.link/u/7Q12HV8Q?src=sheet'
     },
     {
