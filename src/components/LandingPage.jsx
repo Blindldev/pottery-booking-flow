@@ -84,10 +84,8 @@ function LandingPage() {
             <div className="link-arrow">→</div>
           </a>
 
-          <a 
-            href="https://ThePotteryLoop.com/Contact" 
-            target="_blank" 
-            rel="noopener noreferrer"
+          <Link 
+            to="/collaborations"
             className="link-card link-card-collaborations"
           >
             <div className="link-card-content">
@@ -95,7 +93,7 @@ function LandingPage() {
               <p className="link-subtitle">Host groups in chicago? Have a social following or community? We would love to connect!</p>
             </div>
             <div className="link-arrow">→</div>
-          </a>
+          </Link>
 
           <a 
             href="https://ThePotteryLoop.com/Contact" 
