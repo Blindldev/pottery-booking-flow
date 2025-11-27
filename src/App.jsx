@@ -6,6 +6,7 @@ import Studio24Hour from './components/Studio24Hour'
 import InstructorApplication from './components/InstructorApplication'
 import CollaborationsForm from './components/CollaborationsForm'
 import ContactPage from './components/ContactPage'
+import JanuaryCourses from './components/JanuaryCourses'
 import './App.css'
 
 function BookingPage() {
@@ -55,10 +56,17 @@ function ContactPageWrapper() {
   return <ContactPage onBack={() => navigate('/')} />
 }
 
+function JanuaryCoursesPage() {
+  const navigate = useNavigate()
+
+  return <JanuaryCourses onBack={() => navigate('/')} />
+}
+
 function App() {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
+      <Route path="/january-courses" element={<JanuaryCoursesPage />} />
       <Route path="/private-bookings" element={<BookingPage />} />
       <Route path="/open-studio" element={<Studio24Page />} />
       <Route path="/teach" element={<TeachPage />} />

@@ -26,6 +26,17 @@ function LandingPage() {
           </a>
 
           <Link 
+            to="/january-courses"
+            className="link-card link-card-january-courses"
+          >
+            <div className="link-card-content">
+              <h2 className="link-title">January 2026 courses</h2>
+              <p className="link-subtitle"></p>
+            </div>
+            <div className="link-arrow">→</div>
+          </Link>
+
+          <Link 
             to="/private-bookings"
             className="link-card link-card-private-bookings"
           >
