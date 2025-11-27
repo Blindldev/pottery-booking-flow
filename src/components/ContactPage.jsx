@@ -39,38 +39,64 @@ function ContactPage({ onBack }) {
     setErrors({})
 
     try {
-      const API_URL = import.meta.env.VITE_AWS_API_URL?.replace('/booking', '/contact') || ''
+      // Get the base API URL and construct the contact endpoint
+      const baseUrl = import.meta.env.VITE_AWS_API_URL || ''
+      let API_URL = ''
       
-      if (API_URL) {
-        const submissionData = {
-          ...formData,
-          submittedAt: new Date().toISOString()
+      if (baseUrl) {
+        // Replace /booking with /contact, or append /contact if no /booking found
+        if (baseUrl.includes('/booking')) {
+          API_URL = baseUrl.replace('/booking', '/contact')
+        } else {
+          // If the URL doesn't have /booking, try to append /contact
+          API_URL = baseUrl.replace(/\/$/, '') + '/contact'
         }
-        
-        const response = await fetch(API_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(submissionData)
-        })
-        
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}))
-          throw new Error(errorData.message || `Server error: ${response.status}`)
-        }
-        
-        const result = await response.json()
-        console.log('Contact message submitted successfully:', result)
-      } else {
-        console.log('API not configured. Contact data:', formData)
       }
       
+      if (!API_URL) {
+        console.warn('API not configured. Contact data:', formData)
+        // Still show success to user even if API is not configured
+        setSubmitted(true)
+        return
+      }
+
+      const submissionData = {
+        ...formData,
+        submittedAt: new Date().toISOString()
+      }
+      
+      console.log('Submitting to:', API_URL)
+      
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submissionData)
+      })
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        const errorMessage = errorData.message || `Server error: ${response.status} ${response.statusText}`
+        console.error('API Error:', errorMessage, response)
+        throw new Error(errorMessage)
+      }
+      
+      const result = await response.json()
+      console.log('Contact message submitted successfully:', result)
       setSubmitted(true)
     } catch (error) {
       console.error('Submission error:', error)
-      setErrors({ submit: error.message || 'Failed to send message. Please try again.' })
-    } finally {
+      // Provide more specific error messages
+      let errorMessage = 'Failed to send message. Please try again.'
+      
+      if (error.message) {
+        errorMessage = error.message
+      } else if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        errorMessage = 'Network error. Please check your connection and try again.'
+      }
+      
+      setErrors({ submit: errorMessage })
       setIsSubmitting(false)
     }
   }
