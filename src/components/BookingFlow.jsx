@@ -360,9 +360,24 @@ function BookingFlow() {
   const CurrentStepComponent = STEPS[currentStep].component
   const progress = ((currentStep + 1) / STEPS.length) * 100
 
+  const handleRestart = () => {
+    if (window.confirm('Are you sure you want to restart? All your progress will be lost.')) {
+      clearSavedState()
+      window.location.reload()
+    }
+  }
+
   return (
     <div className="booking-flow">
       <div className="step-header" data-step={STEPS[currentStep].id}>
+        <button
+          onClick={handleRestart}
+          className="restart-form-btn"
+          aria-label="Restart form"
+          title="Restart form"
+        >
+          ↻ Restart
+        </button>
         <div className="progress-bar">
           <div className="pot-progress" style={{ width: `${progress}%` }} />
         <div className="progress-steps" role="navigation" aria-label="Booking flow steps">
