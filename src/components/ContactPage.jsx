@@ -54,8 +54,10 @@ function ContactPage({ onBack }) {
       }
       
       if (!API_URL) {
-        console.warn('API not configured. Contact data:', formData)
         // Still show success to user even if API is not configured
+        if (import.meta.env.DEV) {
+          console.warn('API not configured. Contact data:', formData)
+        }
         setSubmitted(true)
         return
       }
@@ -64,8 +66,6 @@ function ContactPage({ onBack }) {
         ...formData,
         submittedAt: new Date().toISOString()
       }
-      
-      console.log('Submitting to:', API_URL)
       
       const response = await fetch(API_URL, {
         method: 'POST',
@@ -78,15 +78,22 @@ function ContactPage({ onBack }) {
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
         const errorMessage = errorData.message || `Server error: ${response.status} ${response.statusText}`
-        console.error('API Error:', errorMessage, response)
+        if (import.meta.env.DEV) {
+          console.error('API Error:', errorMessage, response)
+        }
         throw new Error(errorMessage)
       }
       
       const result = await response.json()
-      console.log('Contact message submitted successfully:', result)
+      if (import.meta.env.DEV) {
+        console.log('Contact message submitted successfully')
+      }
       setSubmitted(true)
     } catch (error) {
-      console.error('Submission error:', error)
+      // Only log errors in development, but always show user-friendly error
+      if (import.meta.env.DEV) {
+        console.error('Submission error:', error)
+      }
       // Provide more specific error messages
       let errorMessage = 'Failed to send message. Please try again.'
       

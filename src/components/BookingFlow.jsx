@@ -318,11 +318,15 @@ function BookingFlow() {
         }
         
         const result = await response.json()
-        console.log('Booking submitted successfully:', result)
+        if (import.meta.env.DEV) {
+          console.log('Booking submitted successfully')
+        }
       } else {
-        // Fallback: log to console if API not configured
-        console.log('API not configured. Booking data:', submissionData)
-        console.warn('To enable AWS integration, set VITE_AWS_API_URL in your .env file')
+        // Fallback: log to console if API not configured (dev only)
+        if (import.meta.env.DEV) {
+          console.log('API not configured. Booking data:', submissionData)
+          console.warn('To enable AWS integration, set VITE_AWS_API_URL in your .env file')
+        }
       }
       
       setIsSubmitted(true)
@@ -337,7 +341,9 @@ function BookingFlow() {
         console.warn('Error clearing saved state:', error)
       }
     } catch (error) {
-      console.error('Submission error:', error)
+      if (import.meta.env.DEV) {
+        console.error('Submission error:', error)
+      }
       const errorMessage = error.message || 'Failed to submit form. Please try again.'
       setErrors({ submit: errorMessage })
       // Still show success to user, but log the error

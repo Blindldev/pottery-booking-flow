@@ -74,12 +74,45 @@ function CollaborationsForm({ onBack }) {
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (validateStep2()) {
-      // Here you would typically send this data to your backend
-      console.log('Collaboration application submitted:', formData)
-      setSubmitted(true)
+      try {
+        const API_URL = import.meta.env.VITE_AWS_API_URL?.replace('/booking', '/collaborations') || ''
+        
+        if (API_URL) {
+          const submissionData = {
+            ...formData,
+            submittedAt: new Date().toISOString()
+          }
+          
+          const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(submissionData)
+          })
+          
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}))
+            throw new Error(errorData.message || `Server error: ${response.status}`)
+          }
+          
+          const result = await response.json()
+          console.log('Collaboration application submitted successfully:', result)
+        } else {
+          console.log('API not configured. Application data:', formData)
+        }
+        
+        setSubmitted(true)
+          } catch (error) {
+            if (import.meta.env.DEV) {
+              console.error('Submission error:', error)
+            }
+        // Still show success to user
+        setSubmitted(true)
+      }
     }
   }
 
