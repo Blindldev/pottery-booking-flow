@@ -95,9 +95,13 @@ function InstructorApplication({ onBack }) {
           }
           
           const result = await response.json()
-          console.log('Instructor application submitted successfully:', result)
+          if (import.meta.env.DEV) {
+            console.log('Instructor application submitted successfully')
+          }
         } else {
-          console.log('API not configured. Application data:', formData)
+          if (import.meta.env.DEV) {
+            console.log('API not configured. Application data:', formData)
+          }
         }
         
         setSubmitted(true)
