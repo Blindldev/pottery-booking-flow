@@ -206,6 +206,42 @@
   box-shadow: 0 4px 12px rgba(197, 106, 70, 0.3);
 }
 
+.btn-submit {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 1rem;
+  border: 2px solid var(--color-border);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  background: var(--color-bg);
+}
+
+.toggle-label:hover {
+  border-color: var(--color-accent-primary);
+  background: rgba(197, 106, 70, 0.05);
+}
+
+.toggle-checkbox {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  accent-color: var(--color-accent-primary);
+  flex-shrink: 0;
+}
+
+.toggle-text {
+  font-weight: 600;
+  color: var(--color-text-main);
+  font-size: 1rem;
+}
+
 .success-icon {
   width: 80px;
   height: 80px;
