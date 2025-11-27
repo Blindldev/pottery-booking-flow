@@ -281,29 +281,49 @@ function BookingFlow() {
       }
     })
     
+    const totalEstimate = workshopEstimates.reduce((sum, est) => sum + est.total, 0)
+    
+    // Prepare submission data
+    const submissionData = {
+      eventTypes: formData.eventTypes,
+      groupSize: formData.groupSize,
+      exactGroupSize: formData.exactGroupSize,
+      venue: formData.venue,
+      workshops: formData.workshops,
+      dates: formData.dates,
+      flexibleDates: formData.flexibleDates,
+      contact: formData.contact,
+      workshopEstimates,
+      totalEstimate,
+      submittedAt: new Date().toISOString()
+    }
+    
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 100))
+      // Check if API is configured
+      const API_URL = import.meta.env.VITE_AWS_API_URL
       
-      // In a real app, you'd send this to your backend
-      console.log('Form submitted successfully!', {
-        ...formData,
-        workshopEstimates,
-        totalEstimate: workshopEstimates.reduce((sum, est) => sum + est.total, 0),
-        submittedAt: new Date().toISOString()
-      })
-      
-      console.log('Booking request details:', {
-        eventTypes: formData.eventTypes,
-        groupSize: formData.groupSize,
-        exactGroupSize: formData.exactGroupSize,
-        venue: formData.venue,
-        workshops: formData.workshops,
-        dates: formData.dates,
-        flexibleDates: formData.flexibleDates,
-        contact: formData.contact,
-        estimates: workshopEstimates
-      })
+      if (API_URL) {
+        // Send to AWS API Gateway
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(submissionData)
+        })
+        
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}))
+          throw new Error(errorData.message || `Server error: ${response.status}`)
+        }
+        
+        const result = await response.json()
+        console.log('Booking submitted successfully:', result)
+      } else {
+        // Fallback: log to console if API not configured
+        console.log('API not configured. Booking data:', submissionData)
+        console.warn('To enable AWS integration, set VITE_AWS_API_URL in your .env file')
+      }
       
       setIsSubmitted(true)
       
