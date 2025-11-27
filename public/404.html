@@ -19,7 +19,8 @@
       // This way the code will only replace the route part and not the real directory.
       // For example, '/project-name/one/two' becomes '/project-name/?/one/two'
       // Otherwise, leave segmentCount as 0.
-      var segmentCount = 1;
+      // Using custom domain, so segmentCount is 0
+      var segmentCount = 0;
 
       var l = window.location;
       l.replace(

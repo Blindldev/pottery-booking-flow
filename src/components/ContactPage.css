@@ -99,88 +99,117 @@
   background: rgba(228, 64, 95, 0.05);
 }
 
-.email-display {
+.contact-form-section {
   margin-top: 2rem;
   padding-top: 2rem;
   border-top: 1px solid var(--color-border);
-  text-align: center;
 }
 
-.email-label {
-  font-size: 0.95rem;
-  color: var(--color-text-muted);
-  margin: 0 0 1rem 0;
-}
-
-.email-copy-box {
+.contact-form {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  padding: 1rem 1.5rem;
-  background: var(--color-bg);
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 0.875rem 1rem;
   border: 2px solid var(--color-border);
   border-radius: 12px;
-  max-width: 500px;
-  margin: 0 auto;
+  font-size: 1rem;
+  font-family: inherit;
+  background: var(--color-bg);
+  color: var(--color-text-main);
+  transition: all 0.3s ease;
+  resize: vertical;
 }
 
-.email-address {
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-accent-primary);
+  box-shadow: 0 0 0 3px rgba(197, 106, 70, 0.1);
+}
+
+.form-group input.error,
+.form-group textarea.error {
+  border-color: #dc3545;
+}
+
+.error-message {
+  font-size: 0.85rem;
+  color: #dc3545;
+  margin-top: 0.25rem;
+}
+
+.submit-error {
+  text-align: center;
+  padding: 0.75rem;
+  background: rgba(220, 53, 69, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+.submit-button {
+  padding: 1rem 2rem;
+  background: var(--color-accent-primary);
+  color: white;
+  border: none;
+  border-radius: 12px;
   font-size: 1rem;
   font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.submit-button:hover:not(:disabled) {
+  background: #AA4C34;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(197, 106, 70, 0.3);
+}
+
+.submit-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.success-icon {
+  font-size: 3rem;
   color: var(--color-accent-primary);
-  font-family: monospace;
-  flex: 1;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.contact-card h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin: 0 0 1rem 0;
   text-align: center;
 }
 
-.copy-container {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  position: relative;
-  flex-shrink: 0;
-}
-
-.copy-button {
-  background: transparent;
-  border: none;
-  font-size: 1.25rem;
-  cursor: pointer;
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.copy-button:hover {
-  background: rgba(197, 106, 70, 0.1);
-  transform: scale(1.1);
-}
-
-.copy-button:active {
-  transform: scale(0.95);
-}
-
-.copy-success {
-  font-size: 0.85rem;
-  color: var(--color-accent-primary);
-  font-weight: 600;
-  white-space: nowrap;
-  animation: fadeInOut 0.3s ease;
-}
-
-@keyframes fadeInOut {
-  0% {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
+.contact-card p {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  line-height: 1.6;
 }
 
 @media (max-width: 768px) {
