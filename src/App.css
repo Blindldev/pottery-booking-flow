@@ -2937,10 +2937,8 @@ body {
 /* Header Section */
 .workshop-header {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
   padding: 1.5rem 1.5rem 1rem 1.5rem;
-  gap: 1rem;
 }
 
 .workshop-title-section {
@@ -3195,11 +3193,6 @@ body {
   
   .workshop-title {
     font-size: 1.2rem;
-  }
-  
-  .workshop-thumbnail {
-    width: 60px;
-    height: 45px;
   }
   
   .workshop-facts {

@@ -215,13 +215,6 @@ function WorkshopStep({ formData, errors, updateFormData, goToStep }) {
                     </h3>
                     <p className="workshop-tagline">{workshop.tagline}</p>
                   </div>
-                  <div className="workshop-thumbnail">
-                    <img 
-                      src={workshop.image} 
-                      alt={workshop.name}
-                      loading="lazy"
-                    />
-                  </div>
                 </div>
 
                 {/* Facts Row */}
