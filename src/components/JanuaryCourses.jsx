@@ -14,14 +14,14 @@ function JanuaryCourses({ onBack }) {
       link: 'https://square.link/u/7Q12HV8Q?src=sheet'
     },
     {
-      day: 'Tuesdays',
-      image: 'https://i.imgur.com/hOXbuap.png',
-      link: 'https://square.link/u/RzhgFvaO?src=sheet'
-    },
-    {
       day: 'Mondays',
       image: 'https://i.imgur.com/Ch3YkAP.png',
       link: 'https://square.link/u/yNcQN6o2?src=sheet'
+    },
+    {
+      day: 'Tuesdays',
+      image: 'https://i.imgur.com/hOXbuap.png',
+      link: 'https://square.link/u/RzhgFvaO?src=sheet'
     }
   ]
 
@@ -30,7 +30,7 @@ function JanuaryCourses({ onBack }) {
       <button onClick={onBack} className="back-btn-studio">BACK</button>
       <div className="january-courses-card">
         <h1>January 2026 Courses</h1>
-        <p className="intro-text">Select a course to register</p>
+        <p className="intro-text">Select a day to get more details about the course offering</p>
         
         <div className="courses-grid">
           {courses.map((course, index) => (
