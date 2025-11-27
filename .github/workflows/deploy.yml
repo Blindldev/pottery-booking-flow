@@ -33,7 +33,7 @@ jobs:
         
       - name: Build
         env:
-          VITE_AWS_API_URL: ${{ secrets.VITE_AWS_API_URL }}
+          VITE_AWS_API_URL: ${{ secrets.VITE_AWS_API_URL || 'https://mg9brncx39.execute-api.us-east-2.amazonaws.com/prod/booking' }}
         run: npm run build
       
       - name: Setup Pages
