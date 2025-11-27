@@ -29,8 +29,8 @@ function JanuaryCourses({ onBack }) {
 
   return (
     <div className="january-courses-container">
-      <button onClick={onBack} className="back-btn-studio">BACK</button>
       <div className="january-courses-card">
+        <button onClick={onBack} className="back-btn-studio">BACK</button>
         <h1>January 2026 Courses</h1>
         <p className="intro-text">Select a day to get more details about the course offering</p>
         

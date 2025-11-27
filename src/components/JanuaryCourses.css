@@ -9,10 +9,12 @@
   position: relative;
 }
 
-.january-courses-container .back-btn-studio {
+.january-courses-card .back-btn-studio {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
   padding: 0.75rem 1.5rem;
-  top: 1rem;
-  left: 1rem;
+  z-index: 10;
 }
 
 .january-courses-card {
@@ -186,10 +188,10 @@
     padding-bottom: 8rem;
   }
 
-  .january-courses-container .back-btn-studio {
+  .january-courses-card .back-btn-studio {
     padding: 0.875rem 1.75rem;
-    top: 0.75rem;
-    left: 0.75rem;
+    top: 1rem;
+    left: 1rem;
   }
 
   .courses-grid {
