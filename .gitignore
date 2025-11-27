@@ -27,3 +27,10 @@ Thumbs.db
 # Logs
 logs
 *.log
+
+# Build artifacts and packages
+*.zip
+lambda-package/
+lambda-instructor/
+lambda-collaborations/
+lambda-contact/

@@ -6,7 +6,7 @@ export default defineConfig(({ command }) => ({
   server: {
     port: 3007
   },
-  base: command === 'build' ? '/pottery-booking-flow/' : '/',
+  base: '/',
   build: {
     outDir: 'dist',
     assetsDir: 'assets'
