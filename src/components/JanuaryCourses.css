@@ -97,11 +97,12 @@
 }
 
 .course-skill-level {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 500;
   color: var(--color-text-muted);
   text-align: center;
-  margin-top: 0.25rem;
+  margin-top: 0.5rem;
+  display: block;
 }
 
 .discount-section {
