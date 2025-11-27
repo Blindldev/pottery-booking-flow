@@ -1,0 +1,8 @@
+{
+  "httpMethod": "POST",
+  "body": "{\"eventTypes\":[\"Corporate\"],\"groupSize\":15,\"exactGroupSize\":null,\"venue\":\"Studio\",\"workshops\":[\"Pottery Wheel classes\"],\"dates\":[\"2024-12-15\"],\"flexibleDates\":null,\"contact\":{\"name\":\"Test User\",\"phone\":\"(555) 123-4567\",\"email\":\"test@example.com\",\"notes\":\"Test booking\"},\"workshopEstimates\":[{\"workshop\":\"Pottery Wheel classes\",\"perPerson\":45,\"total\":675,\"readinessNote\":\"Ready in ~3 weeks (single color glazing)\"}],\"totalEstimate\":675,\"submittedAt\":\"2024-12-15T12:00:00.000Z\"}",
+  "headers": {
+    "Content-Type": "application/json"
+  }
+}
+

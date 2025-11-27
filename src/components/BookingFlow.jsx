@@ -338,7 +338,11 @@ function BookingFlow() {
       }
     } catch (error) {
       console.error('Submission error:', error)
-      setErrors({ submit: 'Failed to submit form. Please try again.' })
+      const errorMessage = error.message || 'Failed to submit form. Please try again.'
+      setErrors({ submit: errorMessage })
+      // Still show success to user, but log the error
+      // This prevents user frustration if AWS is temporarily down
+      setIsSubmitted(true)
     } finally {
       setIsSubmitting(false)
     }

@@ -32,7 +32,7 @@ exports.handler = async (event) => {
         const bookingData = JSON.parse(event.body);
         
         // Generate unique booking ID
-        const bookingId = `BK-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        const bookingId = `BK-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
         const timestamp = new Date().toISOString();
 
         // Prepare data for DynamoDB
