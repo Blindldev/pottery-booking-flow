@@ -95,10 +95,8 @@ function LandingPage() {
             <div className="link-arrow">→</div>
           </Link>
 
-          <a 
-            href="https://ThePotteryLoop.com/Contact" 
-            target="_blank" 
-            rel="noopener noreferrer"
+          <Link 
+            to="/contact"
             className="link-card link-card-contact"
           >
             <div className="link-card-content">
@@ -106,7 +104,7 @@ function LandingPage() {
               <p className="link-subtitle"></p>
             </div>
             <div className="link-arrow">→</div>
-          </a>
+          </Link>
         </div>
       </div>
     </div>

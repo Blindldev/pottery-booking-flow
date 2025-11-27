@@ -5,6 +5,7 @@ import BookingFlow from './components/BookingFlow'
 import Studio24Hour from './components/Studio24Hour'
 import InstructorApplication from './components/InstructorApplication'
 import CollaborationsForm from './components/CollaborationsForm'
+import ContactPage from './components/ContactPage'
 import './App.css'
 
 function BookingPage() {
@@ -48,6 +49,12 @@ function CollaborationsPage() {
   return <CollaborationsForm onBack={() => navigate('/')} />
 }
 
+function ContactPageWrapper() {
+  const navigate = useNavigate()
+
+  return <ContactPage onBack={() => navigate('/')} />
+}
+
 function App() {
   return (
     <Routes>
@@ -56,6 +63,7 @@ function App() {
       <Route path="/open-studio" element={<Studio24Page />} />
       <Route path="/teach" element={<TeachPage />} />
       <Route path="/collaborations" element={<CollaborationsPage />} />
+      <Route path="/contact" element={<ContactPageWrapper />} />
     </Routes>
   )
 }
