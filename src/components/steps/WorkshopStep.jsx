@@ -277,13 +277,6 @@ function WorkshopStep({ formData, errors, updateFormData, goToStep }) {
                 {isInfoExpanded && (
                   <div className="workshop-details-panel">
                     <div className="workshop-details-content">
-                      <div className="workshop-details-image">
-                        <img 
-                          src={workshop.image} 
-                          alt={workshop.name}
-                          loading="lazy"
-                        />
-                      </div>
                       <div className="workshop-details-text">
                         <p className="workshop-description">{workshop.description}</p>
                         <div className="workshop-timeline">
