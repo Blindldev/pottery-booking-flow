@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './JanuaryCourses.css'
 
 function JanuaryCourses({ onBack }) {
+  const [showDiscountInfo, setShowDiscountInfo] = useState(false)
+  
   const courses = [
     {
       day: 'Saturdays',
@@ -51,6 +53,34 @@ function JanuaryCourses({ onBack }) {
               <div className="course-day">{course.day}</div>
             </a>
           ))}
+        </div>
+
+        <div className="discount-section">
+          <button 
+            onClick={() => setShowDiscountInfo(!showDiscountInfo)}
+            className="discount-button"
+          >
+            How to apply discount
+          </button>
+
+          {showDiscountInfo && (
+            <div className="discount-info">
+              <p className="discount-description">
+                To apply a discount code, enter it during checkout on the Square booking page. 
+                Look for the discount or promo code field when completing your purchase.
+              </p>
+              <div className="discount-image-container">
+                <img 
+                  src="https://i.imgur.com/6cCY4cC.png" 
+                  alt="How to apply discount"
+                  className="discount-image"
+                />
+              </div>
+              <p className="discount-note">
+                <strong>Note:</strong> TestingCouponDiscount is not a valid code.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
