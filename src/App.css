@@ -2216,6 +2216,38 @@ body {
   color: #718096;
 }
 
+.success-restart-section {
+  margin-top: 2rem;
+  text-align: center;
+  animation: footerSlideIn 0.8s ease-out 2s both;
+}
+
+.btn-restart-success {
+  padding: 1rem 2rem;
+  background: var(--color-accent-primary);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-restart-success:hover {
+  background: var(--color-accent-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(197, 106, 70, 0.3);
+}
+
+.btn-restart-success:active {
+  transform: translateY(0);
+}
+
 @keyframes footerSlideIn {
   0% { 
     opacity: 0; 

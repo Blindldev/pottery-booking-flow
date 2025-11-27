@@ -344,6 +344,29 @@ function BookingFlow() {
     }
   }
 
+  const handleRestartFromSuccess = () => {
+    clearSavedState()
+    setIsSubmitted(false)
+    setCurrentStep(0)
+    setFormData({
+      eventTypes: [],
+      groupSize: 8,
+      exactGroupSize: null,
+      venue: '',
+      workshops: [],
+      dates: [],
+      flexibleDates: null,
+      contact: {
+        name: '',
+        phone: '',
+        email: '',
+        notes: ''
+      },
+      agreement: false
+    })
+    setErrors({})
+  }
+
   if (isSubmitted) {
     return (
       <div className="booking-flow">
@@ -352,6 +375,14 @@ function BookingFlow() {
         </div>
         <div className="step-content">
           <SuccessStep />
+          <div className="success-restart-section">
+            <button
+              onClick={handleRestartFromSuccess}
+              className="btn-restart-success"
+            >
+              ↻ Start New Booking
+            </button>
+          </div>
         </div>
       </div>
     )
