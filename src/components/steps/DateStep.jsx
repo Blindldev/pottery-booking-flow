@@ -24,11 +24,9 @@ function DateStep({ formData, errors, updateFormData }) {
   const [currentMonth, setCurrentMonth] = useState(getCSTDate())
   
   const handleDateClick = (date) => {
-    // Convert date to CST and format as YYYY-MM-DD
-    const year = date.getFullYear()
-    const month = String(date.getMonth() + 1).padStart(2, '0')
-    const day = String(date.getDate()).padStart(2, '0')
-    const dateString = `${year}-${month}-${day}`
+    // Use the exact date the user clicked - no timezone conversion
+    // Just format it as YYYY-MM-DD using the date's local components
+    const dateString = formatDateToString(date)
     updateFormData('dates', [dateString])
   }
 
@@ -75,10 +73,19 @@ function DateStep({ formData, errors, updateFormData }) {
   }
 
   const getMinDate = () => {
+    // Get today's date in CST for comparison purposes
     const today = getCSTDate()
     const year = today.getFullYear()
     const month = String(today.getMonth() + 1).padStart(2, '0')
     const day = String(today.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
+
+  // Helper to format a date object to YYYY-MM-DD string (no timezone conversion)
+  const formatDateToString = (date) => {
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
     return `${year}-${month}-${day}`
   }
 
@@ -94,16 +101,20 @@ function DateStep({ formData, errors, updateFormData }) {
   }
 
   const isDateInPast = (date) => {
+    // Compare dates by their date string representation (YYYY-MM-DD)
     const today = getCSTDate()
-    today.setHours(0, 0, 0, 0)
-    const compareDate = new Date(date)
-    compareDate.setHours(0, 0, 0, 0)
-    return compareDate < today
+    const todayString = formatDateToString(today)
+    const dateString = formatDateToString(date)
+    return dateString < todayString
   }
 
   const isDateSelected = (date) => {
     if (!selectedDate) return false
-    const dateString = date.toISOString().split('T')[0]
+    // Compare dates without timezone conversion - use the exact date components
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    const dateString = `${year}-${month}-${day}`
     return dateString === selectedDate
   }
 
