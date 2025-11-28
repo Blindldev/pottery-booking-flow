@@ -2836,15 +2836,14 @@ body {
   background: rgba(197, 106, 70, 0.05);
 }
 
-.timeslot-checkbox-label input[type="checkbox"]:checked + span {
-  color: var(--color-accent-primary);
-  font-weight: 600;
-}
-
-.timeslot-checkbox-label input[type="checkbox"]:checked ~ span,
 .timeslot-checkbox-label:has(input[type="checkbox"]:checked) {
   border-color: var(--color-accent-primary);
   background: rgba(197, 106, 70, 0.1);
+}
+
+.timeslot-checkbox-label:has(input[type="checkbox"]:checked) span {
+  color: var(--color-accent-primary);
+  font-weight: 600;
 }
 
 .timeslot-checkbox {
