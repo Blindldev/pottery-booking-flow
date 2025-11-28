@@ -6,8 +6,9 @@ function ReviewStep({ formData, errors, updateFormData }) {
   const effectiveGroupSize = getEffectiveGroupSize(formData.groupSize, formData.exactGroupSize)
 
   const formatDate = (dateString) => {
-    const date = new Date(dateString)
+    const date = new Date(dateString + 'T00:00:00')
     return date.toLocaleDateString('en-US', {
+      timeZone: 'America/Chicago',
       weekday: 'long',
       year: 'numeric',
       month: 'long',
