@@ -9,25 +9,29 @@ function JanuaryCourses({ onBack }) {
       day: 'Saturdays',
       image: 'https://i.imgur.com/07bj5iK.png',
       link: 'https://square.link/u/WBCEF4RC?src=sheet',
-      skillLevel: 'Beginner'
+      skillLevel: 'Beginner',
+      duration: '6 week course'
     },
     {
       day: 'Sundays',
       image: 'https://i.imgur.com/nFvhRD4.png',
       link: 'https://square.link/u/7Q12HV8Q?src=sheet',
-      skillLevel: 'Beginner'
+      skillLevel: 'Beginner',
+      duration: '6 week course'
     },
     {
       day: 'Mondays',
       image: 'https://i.imgur.com/Ch3YkAP.png',
       link: 'https://square.link/u/yNcQN6o2?src=sheet',
-      skillLevel: 'Beginner'
+      skillLevel: 'Beginner',
+      duration: '4 week course'
     },
     {
       day: 'Tuesdays',
       image: 'https://i.imgur.com/hOXbuap.png',
       link: 'https://square.link/u/RzhgFvaO?src=sheet',
-      skillLevel: 'Intermediate'
+      skillLevel: 'Intermediate',
+      duration: '4 week course'
     }
   ]
 
@@ -56,6 +60,7 @@ function JanuaryCourses({ onBack }) {
               </div>
               <div className="course-day">{course.day}</div>
               <div className="course-skill-level">{course.skillLevel}</div>
+              <div className="course-duration">{course.duration}</div>
             </a>
           ))}
         </div>
