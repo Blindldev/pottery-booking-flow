@@ -7,6 +7,7 @@ import InstructorApplication from './components/InstructorApplication'
 import CollaborationsForm from './components/CollaborationsForm'
 import ContactPage from './components/ContactPage'
 import JanuaryCourses from './components/JanuaryCourses'
+import DiscountPage from './components/DiscountPage'
 import './App.css'
 
 function BookingPage() {
@@ -62,6 +63,12 @@ function JanuaryCoursesPage() {
   return <JanuaryCourses onBack={() => navigate('/')} />
 }
 
+function DiscountPageWrapper() {
+  const navigate = useNavigate()
+
+  return <DiscountPage onBack={() => navigate('/')} />
+}
+
 function App() {
   return (
     <Routes>
@@ -72,6 +79,7 @@ function App() {
       <Route path="/teach" element={<TeachPage />} />
       <Route path="/collaborations" element={<CollaborationsPage />} />
       <Route path="/contact" element={<ContactPageWrapper />} />
+      <Route path="/discount" element={<DiscountPageWrapper />} />
     </Routes>
   )
 }
