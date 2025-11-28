@@ -227,6 +227,12 @@ function formatEmailBodyText(bookingData, bookingId) {
     text += `  Venue: ${bookingData.venue || 'N/A'}\n`;
     text += `  Preferred Dates: ${dates.join(', ') || 'N/A'}\n`;
     if (bookingData.flexibleDates) text += `  Flexible Dates: Yes\n`;
+    if (bookingData.timeslots && bookingData.timeslots.length > 0) {
+        text += `  Preferred Timeslots: ${bookingData.timeslots.join(', ')}\n`;
+    }
+    if (bookingData.specificTime) {
+        text += `  Specific Time: ${bookingData.specificTime}\n`;
+    }
     text += `\nWorkshop Selections:\n`;
     workshopEstimates.forEach(est => {
         text += `  - ${est.workshop || 'N/A'}: $${est.perPerson || 0} per person, Total: $${est.total || 0}\n`;
