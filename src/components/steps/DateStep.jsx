@@ -1,10 +1,34 @@
 import React, { useState } from 'react'
 
+// Helper function to get current date in CST
+const getCSTDate = () => {
+  const now = new Date()
+  // CST is UTC-6, CDT is UTC-5. We'll use a simple approach: convert to CST
+  // For simplicity, we'll use America/Chicago timezone
+  const cstDate = new Date(now.toLocaleString('en-US', { timeZone: 'America/Chicago' }))
+  return cstDate
+}
+
+// Helper function to format date string in CST
+const formatDateInCST = (date) => {
+  // Create date object and convert to CST
+  const dateObj = new Date(date + 'T00:00:00')
+  const cstDate = new Date(dateObj.toLocaleString('en-US', { timeZone: 'America/Chicago' }))
+  const year = cstDate.getFullYear()
+  const month = String(cstDate.getMonth() + 1).padStart(2, '0')
+  const day = String(cstDate.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
 function DateStep({ formData, errors, updateFormData }) {
-  const [currentMonth, setCurrentMonth] = useState(new Date())
+  const [currentMonth, setCurrentMonth] = useState(getCSTDate())
   
   const handleDateClick = (date) => {
-    const dateString = date.toISOString().split('T')[0]
+    // Convert date to CST and format as YYYY-MM-DD
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    const dateString = `${year}-${month}-${day}`
     updateFormData('dates', [dateString])
   }
 
@@ -23,9 +47,26 @@ function DateStep({ formData, errors, updateFormData }) {
     })
   }
 
+  const handleTimeslotChange = (timeslot) => {
+    const currentTimeslots = formData.timeslots || []
+    const isSelected = currentTimeslots.includes(timeslot)
+    
+    if (isSelected) {
+      updateFormData('timeslots', currentTimeslots.filter(t => t !== timeslot))
+    } else {
+      updateFormData('timeslots', [...currentTimeslots, timeslot])
+    }
+  }
+
+  const handleSpecificTimeChange = (e) => {
+    updateFormData('specificTime', e.target.value)
+  }
+
   const formatDate = (dateString) => {
-    const date = new Date(dateString)
+    // Parse date string and format in CST
+    const date = new Date(dateString + 'T00:00:00')
     return date.toLocaleDateString('en-US', {
+      timeZone: 'America/Chicago',
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -34,8 +75,11 @@ function DateStep({ formData, errors, updateFormData }) {
   }
 
   const getMinDate = () => {
-    const today = new Date()
-    return today.toISOString().split('T')[0]
+    const today = getCSTDate()
+    const year = today.getFullYear()
+    const month = String(today.getMonth() + 1).padStart(2, '0')
+    const day = String(today.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
   }
 
   const selectedDate = formData.dates && formData.dates.length > 0 ? formData.dates[0] : ''
@@ -50,9 +94,11 @@ function DateStep({ formData, errors, updateFormData }) {
   }
 
   const isDateInPast = (date) => {
-    const today = new Date()
+    const today = getCSTDate()
     today.setHours(0, 0, 0, 0)
-    return date < today
+    const compareDate = new Date(date)
+    compareDate.setHours(0, 0, 0, 0)
+    return compareDate < today
   }
 
   const isDateSelected = (date) => {
@@ -201,6 +247,50 @@ function DateStep({ formData, errors, updateFormData }) {
             >
               ±14 days
             </button>
+          </div>
+
+          {/* Timeslot Selection */}
+          <div className="timeslot-section">
+            <h4>Desired Timeslot (Optional)</h4>
+            <div className="timeslot-checkboxes">
+              <label className="timeslot-checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={(formData.timeslots || []).includes('Morning')}
+                  onChange={() => handleTimeslotChange('Morning')}
+                  className="timeslot-checkbox"
+                />
+                <span>Morning</span>
+              </label>
+              <label className="timeslot-checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={(formData.timeslots || []).includes('Afternoon')}
+                  onChange={() => handleTimeslotChange('Afternoon')}
+                  className="timeslot-checkbox"
+                />
+                <span>Afternoon</span>
+              </label>
+              <label className="timeslot-checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={(formData.timeslots || []).includes('Night')}
+                  onChange={() => handleTimeslotChange('Night')}
+                  className="timeslot-checkbox"
+                />
+                <span>Night</span>
+              </label>
+            </div>
+            <div className="specific-time-section">
+              <label className="form-label">Specific Time (Optional)</label>
+              <input
+                type="text"
+                value={formData.specificTime || ''}
+                onChange={handleSpecificTimeChange}
+                className="form-control"
+                placeholder="e.g., 2:00 PM, 10:00 AM"
+              />
+            </div>
           </div>
         </div>
       )}

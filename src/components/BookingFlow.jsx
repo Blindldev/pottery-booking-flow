@@ -38,6 +38,8 @@ function BookingFlow() {
           workshops: [],
           dates: [],
           flexibleDates: null,
+          timeslots: [],
+          specificTime: '',
           contact: {
             name: '',
             phone: '',
@@ -62,6 +64,8 @@ function BookingFlow() {
           workshops: [],
           dates: [],
           flexibleDates: null,
+          timeslots: [],
+          specificTime: '',
           contact: {
             name: '',
             phone: '',
@@ -290,12 +294,14 @@ function BookingFlow() {
       exactGroupSize: formData.exactGroupSize,
       venue: formData.venue,
       workshops: formData.workshops,
-      dates: formData.dates,
-      flexibleDates: formData.flexibleDates,
-      contact: formData.contact,
-      workshopEstimates,
-      totalEstimate,
-      submittedAt: new Date().toISOString()
+          dates: formData.dates,
+          flexibleDates: formData.flexibleDates,
+          timeslots: formData.timeslots || [],
+          specificTime: formData.specificTime || '',
+          contact: formData.contact,
+          workshopEstimates,
+          totalEstimate,
+          submittedAt: new Date().toISOString()
     }
     
     try {
