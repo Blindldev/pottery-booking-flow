@@ -152,15 +152,42 @@
 }
 
 .pottery-wheel.spinning {
-  animation: spin 2s ease-out;
+  animation: spin 3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 @keyframes spin {
   0% {
-    transform: rotate(0deg);
+    transform: rotate(0deg) scale(1);
+  }
+  10% {
+    transform: rotate(180deg) scale(1.05);
+  }
+  20% {
+    transform: rotate(360deg) scale(1);
+  }
+  30% {
+    transform: rotate(540deg) scale(1.05);
+  }
+  40% {
+    transform: rotate(720deg) scale(1);
+  }
+  50% {
+    transform: rotate(900deg) scale(1.05);
+  }
+  60% {
+    transform: rotate(1080deg) scale(1);
+  }
+  70% {
+    transform: rotate(1260deg) scale(1.03);
+  }
+  80% {
+    transform: rotate(1440deg) scale(1);
+  }
+  90% {
+    transform: rotate(1620deg) scale(1.02);
   }
   100% {
-    transform: rotate(1080deg);
+    transform: rotate(1800deg) scale(1);
   }
 }
 
@@ -169,6 +196,20 @@
   z-index: 2;
   position: relative;
   transition: transform 0.2s ease;
+  animation: none;
+}
+
+.pottery-wheel.spinning .wheel-center {
+  animation: centerPulse 0.3s ease-in-out infinite;
+}
+
+@keyframes centerPulse {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.2) rotate(180deg);
+  }
 }
 
 .spin-button {
@@ -200,6 +241,28 @@
 .result-container {
   text-align: center;
   padding: 1rem 0;
+}
+
+.result-congrats {
+  font-size: 3rem;
+  color: var(--color-accent-primary);
+  margin-bottom: 1rem;
+  font-weight: 800;
+  animation: congratsPop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes congratsPop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .result-emoji {

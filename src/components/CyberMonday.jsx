@@ -57,7 +57,7 @@ function CyberMonday() {
       // Pick a random offer
       const randomOffer = offers[Math.floor(Math.random() * offers.length)]
       
-      // Simulate spinning animation (2 seconds)
+      // Simulate spinning animation (3 seconds for better effect)
       setTimeout(() => {
         setIsSpinning(false)
         setResult({
@@ -66,7 +66,7 @@ function CyberMonday() {
           code: randomOffer.code
         })
         setIsSubmitting(false)
-      }, 2000)
+      }, 3000)
       
       // TODO: Re-enable AWS API call when backend is ready
       /*
@@ -244,6 +244,7 @@ function CyberMonday() {
             </>
           ) : (
             <div className="result-container">
+              <h1 className="result-congrats">Congrats!</h1>
               <div className="result-emoji">🫙</div>
               <h2 className="result-title">{result.offerLabel}</h2>
               <div className="result-code">
