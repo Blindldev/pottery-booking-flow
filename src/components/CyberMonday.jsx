@@ -178,7 +178,7 @@ function CyberMonday() {
         className="cybermonday-back-btn"
         aria-label="Back to home"
       >
-        Pottery Nav
+        ←
       </button>
       <div className="cybermonday-container">
         <div className="cybermonday-card">
