@@ -146,8 +146,8 @@
 
 .cybermonday-page .pottery-wheel,
 .wheel-background .pottery-wheel {
-  width: 100px;
-  height: 100px;
+  width: 100px !important;
+  height: 100px !important;
   border-radius: 50%;
   background: radial-gradient(circle at 30% 30%, #D2691E 0%, #8B4513 50%, #654321 100%);
   display: flex;
@@ -409,8 +409,8 @@
 
   .cybermonday-page .pottery-wheel,
   .wheel-background .pottery-wheel {
-    width: 100px;
-    height: 100px;
+    width: 100px !important;
+    height: 100px !important;
     position: absolute !important;
     top: 50% !important;
     left: 50% !important;
