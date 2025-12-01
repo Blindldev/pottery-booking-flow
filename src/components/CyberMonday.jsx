@@ -226,9 +226,16 @@ function CyberMonday() {
                 )}
 
                 <div className="wheel-container">
-                  <div className={`pottery-wheel ${isSpinning ? 'spinning' : ''}`}>
-                    <div className="wheel-center">
-                      {isSpinning ? '🌀' : '🏺'}
+                  <div className="wheel-background">
+                    <img 
+                      src="https://i.imgur.com/YQxEcPK.jpeg" 
+                      alt="Pottery wheel" 
+                      className="wheel-bg-image"
+                    />
+                    <div className={`pottery-wheel ${isSpinning ? 'spinning' : ''}`}>
+                      <div className="wheel-center">
+                        {isSpinning ? '🌀' : '🏺'}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -245,7 +252,7 @@ function CyberMonday() {
           ) : (
             <div className="result-container">
               <h1 className="result-congrats">Congrats!</h1>
-              <div className="result-emoji">🫙</div>
+              <div className="result-emoji">🎁</div>
               <h2 className="result-title">{result.offerLabel}</h2>
               <div className="result-code">
                 <span className="code-label">Your discount code:</span>
@@ -263,4 +270,3 @@ function CyberMonday() {
 }
 
 export default CyberMonday
-
