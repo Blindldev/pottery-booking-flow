@@ -21,7 +21,8 @@ const CYBER_OFFERS = [
   { code: 'CANDLE10', label: 'Get $10 off our Ceramic Candles class when you bring a friend', link: 'https://www.thepotteryloop.com/event-details/winter-candle-workshop-2025-12-06-13-30' },
   { code: 'WHEEL10', label: 'Get $10 off a Wheel Throwing class', link: 'https://www.thepotteryloop.com/service-page/intro-pottery-wheel-class' },
   { code: 'JAN30', label: 'Get $30 off any multi-week Wheel course in January', link: 'https://potterychicago.com/january-courses' },
-  { code: 'HAND10', label: 'Get $10 off a Handbuilding Date Night class', link: 'https://www.thepotteryloop.com/service-page/handbuilding-workshop' },
+  { code: 'HAND10', label: 'Get $10 off a Handbuilding Workshop', link: 'https://www.thepotteryloop.com/service-page/handbuilding-workshop' },
+  { code: '$20Mug', label: 'Get $20 off a mug glazing class', link: 'https://www.thepotteryloop.com/booking-calendar/the-perfect-mug?referral=service_details_widget&timezone=America%2FChicago&location=' },
   { code: 'MYSTERY15', label: 'Mystery deal: Get 15% off any one pottery class of your choice', link: 'https://thepotteryloop.com' }
 ];
 
