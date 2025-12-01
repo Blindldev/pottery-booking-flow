@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './CyberMonday.css'
 
 function CyberMonday() {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -86,8 +88,8 @@ function CyberMonday() {
               link: randomOffer.link
             })
             setIsSubmitting(false)
-          }, 500)
-        }, 3000)
+          }, 300) // Reduced from 500ms
+        }, 2500) // Reduced from 3000ms
         return
       }
 
@@ -119,7 +121,7 @@ function CyberMonday() {
         console.log('Cyber Monday spin successful', resultData)
       }
 
-      // Simulate spinning animation (3 seconds for 3 full rotations)
+      // Simulate spinning animation (2.5 seconds for 3 full rotations)
       setTimeout(() => {
         // Start fade out
         const wheelElement = document.querySelector('.pottery-wheel')
@@ -137,8 +139,8 @@ function CyberMonday() {
             link: resultData.link || 'https://thepotteryloop.com'
           })
           setIsSubmitting(false)
-        }, 500) // Wait for fade-out animation
-      }, 3000)
+        }, 300) // Wait for fade-out animation (reduced from 500ms)
+      }, 2500) // Reduced from 3000ms
     } catch (error) {
       // Only log errors in development, but always show user-friendly error
       if (import.meta.env.DEV) {
@@ -171,6 +173,13 @@ function CyberMonday() {
 
   return (
     <div className="cybermonday-page">
+      <button 
+        onClick={() => navigate('/')}
+        className="cybermonday-back-btn"
+        aria-label="Back to home"
+      >
+        Pottery Nav
+      </button>
       <div className="cybermonday-container">
         <div className="cybermonday-card">
           {!result && (
