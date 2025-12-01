@@ -119,13 +119,26 @@ function CyberMonday() {
         console.log('Cyber Monday spin successful', resultData)
       }
 
-      // Stop spinning after a short delay to show the animation
+      // Simulate spinning animation (3 seconds for 3 full rotations)
       setTimeout(() => {
-        setIsSpinning(false)
-        setResult(resultData)
-        setIsSubmitting(false)
-      }, 2000)
-      */
+        // Start fade out
+        const wheelElement = document.querySelector('.pottery-wheel')
+        if (wheelElement) {
+          wheelElement.classList.add('fade-out')
+        }
+        
+        // Show result after fade completes
+        setTimeout(() => {
+          setIsSpinning(false)
+          setResult({
+            success: true,
+            offerLabel: resultData.offerLabel,
+            code: resultData.code,
+            link: resultData.link || 'https://thepotteryloop.com'
+          })
+          setIsSubmitting(false)
+        }, 500) // Wait for fade-out animation
+      }, 3000)
     } catch (error) {
       // Only log errors in development, but always show user-friendly error
       if (import.meta.env.DEV) {
