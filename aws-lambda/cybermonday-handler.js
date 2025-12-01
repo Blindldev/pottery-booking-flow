@@ -2,7 +2,7 @@
 // Uses AWS SDK v3 (Node.js 20.x)
 
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { DynamoDBDocumentClient, PutCommand, ScanCommand } = require('@aws-sdk/lib-dynamodb');
+const { DynamoDBDocumentClient, PutCommand, QueryCommand } = require('@aws-sdk/lib-dynamodb');
 const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
 const { randomUUID } = require('crypto');
 
@@ -17,14 +17,12 @@ const BOOKINGS_URL = process.env.BOOKINGS_URL || 'https://ThePotteryLoop.com';
 
 // Cyber Monday offers
 const CYBER_OFFERS = [
-  { code: 'CANDLE5', label: 'Get $5 off our Ceramic Candles class', link: 'https://thepotteryloop.com' },
-  { code: 'CANDLE10', label: 'Get $10 off our Ceramic Candles class when you bring a friend', link: 'https://thepotteryloop.com' },
-  { code: 'WHEEL15', label: 'Get $15 off a Wheel Throwing Taster class', link: 'https://thepotteryloop.com' },
-  { code: 'WHEEL30', label: 'Get $30 off any multi-week Wheel course in January', link: 'https://thepotteryloop.com' },
-  { code: 'HAND10', label: 'Get $10 off a Handbuilding Date Night class', link: 'https://thepotteryloop.com' },
-  { code: 'HAND20', label: 'Get $20 off our Handbuilding & Wine evening class', link: 'https://thepotteryloop.com' },
-  { code: 'JAN30', label: 'Get $30 off any multi-week pottery course in January', link: 'https://thepotteryloop.com' },
-  { code: 'MYSTERY15', label: 'Mystery deal: Get $15 off any one pottery class of your choice', link: 'https://thepotteryloop.com' }
+  { code: 'CANDLE5', label: 'Get $5 off our Ceramic Candles class', link: 'https://www.thepotteryloop.com/event-details/winter-candle-workshop-2025-12-06-13-30' },
+  { code: 'CANDLE10', label: 'Get $10 off our Ceramic Candles class when you bring a friend', link: 'https://www.thepotteryloop.com/event-details/winter-candle-workshop-2025-12-06-13-30' },
+  { code: 'WHEEL10', label: 'Get $10 off a Wheel Throwing class', link: 'https://www.thepotteryloop.com/service-page/intro-pottery-wheel-class' },
+  { code: 'JAN30', label: 'Get $30 off any multi-week Wheel course in January', link: 'https://potterychicago.com/january-courses' },
+  { code: 'HAND10', label: 'Get $10 off a Handbuilding Date Night class', link: 'https://www.thepotteryloop.com/service-page/handbuilding-workshop' },
+  { code: 'MYSTERY15', label: 'Mystery deal: Get 15% off any one pottery class of your choice', link: 'https://thepotteryloop.com' }
 ];
 
 exports.handler = async (event) => {
@@ -96,36 +94,43 @@ exports.handler = async (event) => {
       };
     }
 
-    // Check if email already exists in DynamoDB
-    const normalizedEmail = email.trim().toLowerCase();
+    // Check if email was already sent to this address
+    // Try to query by email (if GSI exists), otherwise skip the check
+    let existingItem = null;
     try {
-      const scanResult = await docClient.send(new ScanCommand({
+      const emailCheck = await docClient.send(new QueryCommand({
         TableName: TABLE_NAME,
-        FilterExpression: 'email = :email',
+        IndexName: 'email-index', // GSI on email field
+        KeyConditionExpression: 'email = :email',
         ExpressionAttributeValues: {
-          ':email': normalizedEmail
+          ':email': email.trim()
         },
         Limit: 1
       }));
 
-      if (scanResult.Items && scanResult.Items.length > 0) {
-        // Email already exists, return the existing offer
-        const existingItem = scanResult.Items[0];
-        return {
-          statusCode: 200,
-          headers,
-          body: JSON.stringify({
-            success: true,
-            offerLabel: existingItem.label,
-            code: existingItem.code,
-            link: existingItem.link || BOOKINGS_URL,
-            alreadyPlayed: true
-          })
-        };
+      if (emailCheck.Items && emailCheck.Items.length > 0) {
+        existingItem = emailCheck.Items[0];
       }
-    } catch (scanError) {
-      // If scan fails, log but continue with new submission
-      console.log('Scan for existing email failed, proceeding with new submission:', scanError.message);
+    } catch (error) {
+      // If index doesn't exist, continue without duplicate check
+      // This is acceptable for now - we'll still store the new entry
+      console.log('Email index check skipped:', error.message);
+    }
+
+    // If email was already sent, return the existing result
+    if (existingItem && existingItem.emailSent) {
+      const existingOffer = CYBER_OFFERS.find(o => o.code === existingItem.code);
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          success: true,
+          offerLabel: existingItem.label,
+          code: existingItem.code,
+          link: existingOffer?.link || existingItem.link || BOOKINGS_URL,
+          alreadySent: true
+        })
+      };
     }
 
     // Pick a random offer
@@ -139,12 +144,13 @@ exports.handler = async (event) => {
     const dbItem = {
       id,
       name: name.trim(),
-      email: normalizedEmail,
+      email: email.trim(),
       consent: true,
       label: offer.label,
       code: offer.code,
-      link: offer.link || BOOKINGS_URL,
-      createdAt
+      link: offer.link,
+      createdAt,
+      emailSent: true
     };
 
     // Store in DynamoDB
@@ -153,16 +159,15 @@ exports.handler = async (event) => {
       Item: dbItem
     }));
 
-    // Format email content
-    const bookingLink = offer.link || BOOKINGS_URL;
-    const emailBody = formatEmailBody(name, email, offer, bookingLink);
+    // Format email content using the offer's specific link
+    const emailBody = formatEmailBody(name, email, offer, offer.link || BOOKINGS_URL);
     const emailSubject = `Your Cyber Monday Discount Code: ${offer.code}`;
 
     // Send email via SES
     await sesClient.send(new SendEmailCommand({
       Source: FROM_EMAIL,
       Destination: {
-        ToAddresses: [email]
+        ToAddresses: [email.trim()]
       },
       Message: {
         Subject: {
@@ -175,7 +180,7 @@ exports.handler = async (event) => {
             Charset: 'UTF-8'
           },
           Text: {
-            Data: formatEmailBodyText(name, email, offer, bookingLink),
+            Data: formatEmailBodyText(name, email, offer, offer.link || BOOKINGS_URL),
             Charset: 'UTF-8'
           }
         }
