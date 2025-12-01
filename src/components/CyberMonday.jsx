@@ -30,7 +30,9 @@ function CyberMonday() {
   }
 
   const handleSpin = async (e) => {
-    e.preventDefault()
+    if (e && e.preventDefault) {
+      e.preventDefault()
+    }
     if (!validateForm()) {
       return
     }
@@ -246,7 +248,11 @@ function CyberMonday() {
                       className="wheel-bg-image"
                     />
                     {!result && (
-                      <div className={`pottery-wheel ${isSpinning ? 'spinning' : ''}`}>
+                      <div 
+                        className={`pottery-wheel ${isSpinning ? 'spinning' : ''}`}
+                        onClick={isFormValid && !isSubmitting ? handleSpin : undefined}
+                        style={isFormValid && !isSubmitting ? { cursor: 'pointer' } : {}}
+                      >
                         <div className="wheel-center">
                           {isSpinning ? '🌀' : '🏺'}
                         </div>
