@@ -46,14 +46,14 @@ function CyberMonday() {
       // TEMPORARILY DISABLED: AWS API call paused for testing
       // Simulate a result to show the pottery wheel animation
       const offers = [
-        { code: 'CANDLE5', label: 'Get $5 off our Ceramic Candles class' },
-        { code: 'CANDLE10', label: 'Get $10 off our Ceramic Candles class when you bring a friend' },
-        { code: 'WHEEL15', label: 'Get $15 off a Wheel Throwing Taster class' },
-        { code: 'WHEEL30', label: 'Get $30 off any multi-week Wheel course in January' },
-        { code: 'HAND10', label: 'Get $10 off a Handbuilding Date Night class' },
-        { code: 'HAND20', label: 'Get $20 off our Handbuilding & Wine evening class' },
-        { code: 'JAN30', label: 'Get $30 off any multi-week pottery course in January' },
-        { code: 'MYSTERY15', label: 'Mystery deal: Get $15 off any one pottery class of your choice' }
+        { code: 'CANDLE5', label: 'Get $5 off our Ceramic Candles class', link: 'https://thepotteryloop.com' },
+        { code: 'CANDLE10', label: 'Get $10 off our Ceramic Candles class when you bring a friend', link: 'https://thepotteryloop.com' },
+        { code: 'WHEEL15', label: 'Get $15 off a Wheel Throwing Taster class', link: 'https://thepotteryloop.com' },
+        { code: 'WHEEL30', label: 'Get $30 off any multi-week Wheel course in January', link: 'https://thepotteryloop.com' },
+        { code: 'HAND10', label: 'Get $10 off a Handbuilding Date Night class', link: 'https://thepotteryloop.com' },
+        { code: 'HAND20', label: 'Get $20 off our Handbuilding & Wine evening class', link: 'https://thepotteryloop.com' },
+        { code: 'JAN30', label: 'Get $30 off any multi-week pottery course in January', link: 'https://thepotteryloop.com' },
+        { code: 'MYSTERY15', label: 'Mystery deal: Get $15 off any one pottery class of your choice', link: 'https://thepotteryloop.com' }
       ]
       
       // Pick a random offer
@@ -73,7 +73,8 @@ function CyberMonday() {
           setResult({
             success: true,
             offerLabel: randomOffer.label,
-            code: randomOffer.code
+            code: randomOffer.code,
+            link: randomOffer.link
           })
           setIsSubmitting(false)
         }, 500) // Wait for fade-out animation
@@ -275,6 +276,16 @@ function CyberMonday() {
               <h1 className="result-congrats">Congrats!</h1>
               <div className="result-emoji">🎁</div>
               <h2 className="result-title">{result.offerLabel}</h2>
+              {result.link && (
+                <a 
+                  href={result.link} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="result-link"
+                >
+                  Book your class at The Pottery Loop
+                </a>
+              )}
               <div className="result-code">
                 <span className="code-label">Your discount code:</span>
                 <span className="code-value">{result.code}</span>
