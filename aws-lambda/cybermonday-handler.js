@@ -161,7 +161,7 @@ exports.handler = async (event) => {
 
     // Format email content using the offer's specific link
     const emailBody = formatEmailBody(name, email, offer, offer.link || BOOKINGS_URL);
-    const emailSubject = `Your Cyber Monday Discount Code: ${offer.code}`;
+    const emailSubject = `Your Pottery Class Discount Code`;
 
     // Send email via SES
     await sesClient.send(new SendEmailCommand({
@@ -213,78 +213,57 @@ exports.handler = async (event) => {
 
 function formatEmailBody(name, email, offer, bookingsUrl) {
   return `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background-color: #C56A46; color: white; padding: 30px; text-align: center; border-radius: 12px 12px 0 0; }
-        .content { padding: 30px; background-color: #f9f9f9; }
-        .offer-box { background: white; padding: 25px; border-radius: 12px; margin: 20px 0; border: 3px solid #C56A46; }
-        .code { font-size: 2rem; font-weight: bold; color: #C56A46; text-align: center; letter-spacing: 0.2em; margin: 15px 0; }
-        .cta-button { display: inline-block; padding: 15px 30px; background-color: #C56A46; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 20px 0; }
-        .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
-        .warning { background-color: #fff3cd; border: 2px solid #ffc107; padding: 15px; border-radius: 8px; margin: 20px 0; color: #856404; font-weight: bold; }
-      </style>
-    </head>
-    <body>
-      <div class="container">
-        <div class="header">
-          <h1>🎉 Spin the digital pottery wheel for a discount on actual classes!!</h1>
-        </div>
-        <div class="content">
-          <p>Hi ${name},</p>
-          <p>Congratulations! You've spun the pottery wheel and won:</p>
-          
-          <div class="offer-box">
-            <h2 style="color: #C56A46; margin-top: 0;">${offer.label}</h2>
-            <div class="code">${offer.code}</div>
-          </div>
-
-          <p style="text-align: center;">
-            <a href="${bookingsUrl}" class="cta-button">Book Your Class Now</a>
-          </p>
-
-          <div class="warning">
-            ⚠️ Valid for 24 hours only. Use your code at checkout!
-          </div>
-
-          <p>Happy holidays and we hope to see you soon!!</p>
-          <p>Best regards,<br>The PotteryChicago Team</p>
-        </div>
-        <div class="footer">
-          <p>PotteryChicago | Building a Community Around Pottery in Chicago</p>
-        </div>
-      </div>
-    </body>
-    </html>
-  `;
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <p>Hi ${name},</p>
+  
+  <p>Thank you for participating in our pottery wheel game. Here is your discount code:</p>
+  
+  <p><strong>${offer.label}</strong></p>
+  
+  <p>Your discount code: <strong style="font-size: 18px; letter-spacing: 2px;">${offer.code}</strong></p>
+  
+  <p>You can use this code when booking your class: <a href="${bookingsUrl}" style="color: #0066cc;">${bookingsUrl}</a></p>
+  
+  <p><small>This code is valid for 24 hours.</small></p>
+  
+  <p>Happy holidays and we hope to see you soon!</p>
+  
+  <p>Best regards,<br>
+  The PotteryChicago Team</p>
+  
+  <hr style="border: none; border-top: 1px solid #eeeeee; margin: 20px 0;">
+  
+  <p style="font-size: 12px; color: #666666;">PotteryChicago | Building a Community Around Pottery in Chicago</p>
+</body>
+</html>
+  `.trim();
 }
 
 function formatEmailBodyText(name, email, offer, bookingsUrl) {
-  return `
-Spin the digital pottery wheel for a discount on actual classes!!
+  return `Hi ${name},
 
-Hi ${name},
-
-Congratulations! You've spun the pottery wheel and won:
+Thank you for participating in our pottery wheel game. Here is your discount code:
 
 ${offer.label}
 
 Your discount code: ${offer.code}
 
-Book your class now: ${bookingsUrl}
+You can use this code when booking your class: ${bookingsUrl}
 
-⚠️ Valid for 24 hours only. Use your code at checkout!
+This code is valid for 24 hours.
 
-Happy holidays and we hope to see you soon!!
+Happy holidays and we hope to see you soon!
 
 Best regards,
 The PotteryChicago Team
 
 ---
-PotteryChicago | Building a Community Around Pottery in Chicago
-  `.trim();
+PotteryChicago | Building a Community Around Pottery in Chicago`.trim();
 }
 
