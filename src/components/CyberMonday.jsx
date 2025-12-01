@@ -244,7 +244,7 @@ function CyberMonday() {
                 <div className="wheel-container">
                   <div className="wheel-background">
                     <img 
-                      src="https://i.imgur.com/YQxEcPK.jpeg" 
+                      src="https://i.imgur.com/nNmUtb0.png" 
                       alt="Pottery wheel" 
                       className="wheel-bg-image"
                     />
