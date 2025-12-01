@@ -8,6 +8,7 @@ import CollaborationsForm from './components/CollaborationsForm'
 import ContactPage from './components/ContactPage'
 import JanuaryCourses from './components/JanuaryCourses'
 import DiscountPage from './components/DiscountPage'
+import CyberMonday from './components/CyberMonday'
 import './App.css'
 
 function BookingPage() {
@@ -69,6 +70,10 @@ function DiscountPageWrapper() {
   return <DiscountPage onBack={() => navigate('/')} />
 }
 
+function CyberMondayPage() {
+  return <CyberMonday />
+}
+
 function App() {
   return (
     <Routes>
@@ -80,6 +85,7 @@ function App() {
       <Route path="/collaborations" element={<CollaborationsPage />} />
       <Route path="/contact" element={<ContactPageWrapper />} />
       <Route path="/discount" element={<DiscountPageWrapper />} />
+      <Route path="/cybermonday" element={<CyberMondayPage />} />
     </Routes>
   )
 }
