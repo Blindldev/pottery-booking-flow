@@ -171,10 +171,14 @@ function CyberMonday() {
     <div className="cybermonday-page">
       <div className="cybermonday-container">
         <div className="cybermonday-card">
-          <h1>Spin the digital pottery wheel for a discount on actual classes!!</h1>
-          <p className="cybermonday-subheading">
-            Fill in your details, spin once, and we'll email you a discount code. Valid for 24 hours only.
-          </p>
+          {!result && (
+            <>
+              <h1>Spin the digital pottery wheel for a discount on actual classes!!</h1>
+              <p className="cybermonday-subheading">
+                Fill in your details, spin once, and we'll email you a discount code. Valid for 24 hours only.
+              </p>
+            </>
+          )}
 
           {!result ? (
             <>
