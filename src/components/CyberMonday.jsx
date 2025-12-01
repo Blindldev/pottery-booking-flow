@@ -57,15 +57,24 @@ function CyberMonday() {
       // Pick a random offer
       const randomOffer = offers[Math.floor(Math.random() * offers.length)]
       
-      // Simulate spinning animation (3 seconds for better effect)
+      // Simulate spinning animation (3 seconds for 3 full rotations)
       setTimeout(() => {
-        setIsSpinning(false)
-        setResult({
-          success: true,
-          offerLabel: randomOffer.label,
-          code: randomOffer.code
-        })
-        setIsSubmitting(false)
+        // Start fade out
+        const wheelElement = document.querySelector('.pottery-wheel')
+        if (wheelElement) {
+          wheelElement.classList.add('fade-out')
+        }
+        
+        // Show result after fade completes
+        setTimeout(() => {
+          setIsSpinning(false)
+          setResult({
+            success: true,
+            offerLabel: randomOffer.label,
+            code: randomOffer.code
+          })
+          setIsSubmitting(false)
+        }, 500) // Wait for fade-out animation
       }, 3000)
       
       // TODO: Re-enable AWS API call when backend is ready
@@ -236,11 +245,13 @@ function CyberMonday() {
                       alt="Pottery wheel" 
                       className="wheel-bg-image"
                     />
-                    <div className={`pottery-wheel ${isSpinning ? 'spinning' : ''}`}>
-                      <div className="wheel-center">
-                        {isSpinning ? '🌀' : '🏺'}
+                    {!result && (
+                      <div className={`pottery-wheel ${isSpinning ? 'spinning' : ''}`}>
+                        <div className="wheel-center">
+                          {isSpinning ? '🌀' : '🏺'}
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
 
