@@ -41,6 +41,35 @@ function CyberMonday() {
     setResult(null)
 
     try {
+      // TEMPORARILY DISABLED: AWS API call paused for testing
+      // Simulate a result to show the pottery wheel animation
+      const offers = [
+        { code: 'CANDLE5', label: 'Get $5 off our Ceramic Candles class' },
+        { code: 'CANDLE10', label: 'Get $10 off our Ceramic Candles class when you bring a friend' },
+        { code: 'WHEEL15', label: 'Get $15 off a Wheel Throwing Taster class' },
+        { code: 'WHEEL30', label: 'Get $30 off any multi-week Wheel course in January' },
+        { code: 'HAND10', label: 'Get $10 off a Handbuilding Date Night class' },
+        { code: 'HAND20', label: 'Get $20 off our Handbuilding & Wine evening class' },
+        { code: 'JAN30', label: 'Get $30 off any multi-week pottery course in January' },
+        { code: 'MYSTERY15', label: 'Mystery deal: Get $15 off any one pottery class of your choice' }
+      ]
+      
+      // Pick a random offer
+      const randomOffer = offers[Math.floor(Math.random() * offers.length)]
+      
+      // Simulate spinning animation (2 seconds)
+      setTimeout(() => {
+        setIsSpinning(false)
+        setResult({
+          success: true,
+          offerLabel: randomOffer.label,
+          code: randomOffer.code
+        })
+        setIsSubmitting(false)
+      }, 2000)
+      
+      // TODO: Re-enable AWS API call when backend is ready
+      /*
       // Get the base API URL and construct the cybermonday endpoint
       const baseUrl = import.meta.env.VITE_AWS_API_URL || ''
       let API_URL = ''
@@ -107,6 +136,7 @@ function CyberMonday() {
         setResult(resultData)
         setIsSubmitting(false)
       }, 2000)
+      */
     } catch (error) {
       // Only log errors in development, but always show user-friendly error
       if (import.meta.env.DEV) {
