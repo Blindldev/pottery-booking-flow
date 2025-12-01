@@ -11,7 +11,7 @@ const docClient = DynamoDBDocumentClient.from(dynamoClient);
 const sesClient = new SESClient({ region: 'us-east-2' });
 
 const TABLE_NAME = process.env.CYBERMONDAY_TABLE_NAME || 'CyberMondayGamePlays';
-const FROM_EMAIL = 'create@potterychicago.com';
+const FROM_EMAIL = 'The Pottery Loop <create@potterychicago.com>';
 const TO_EMAIL = 'PotteryChicago@gmail.com';
 const BOOKINGS_URL = process.env.BOOKINGS_URL || 'https://ThePotteryLoop.com';
 
@@ -161,7 +161,7 @@ exports.handler = async (event) => {
 
     // Format email content using the offer's specific link
     const emailBody = formatEmailBody(name, email, offer, offer.link || BOOKINGS_URL);
-    const emailSubject = `Your Pottery Class Discount Code`;
+    const emailSubject = `Your Booking Code: ${offer.code}`;
 
     // Send email via SES
     await sesClient.send(new SendEmailCommand({
@@ -219,27 +219,22 @@ function formatEmailBody(name, email, offer, bookingsUrl) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333333; max-width: 600px; margin: 0 auto; padding: 20px;">
+<body style="font-family: Arial, Helvetica, sans-serif; line-height: 1.6; color: #000000; font-size: 14px; max-width: 600px; margin: 0 auto; padding: 20px;">
   <p>Hi ${name},</p>
   
-  <p>Thank you for participating in our pottery wheel game. Here is your discount code:</p>
+  <p>Your discount code for your pottery class booking:</p>
   
   <p><strong>${offer.label}</strong></p>
   
-  <p>Your discount code: <strong style="font-size: 18px; letter-spacing: 2px;">${offer.code}</strong></p>
+  <p>Code: <strong>${offer.code}</strong></p>
   
-  <p>You can use this code when booking your class: <a href="${bookingsUrl}" style="color: #0066cc;">${bookingsUrl}</a></p>
+  <p>Booking link: ${bookingsUrl}</p>
   
-  <p><small>This code is valid for 24 hours.</small></p>
+  <p>Valid for 24 hours.</p>
   
-  <p>Happy holidays and we hope to see you soon!</p>
+  <p>Happy holidays!</p>
   
-  <p>Best regards,<br>
-  The PotteryChicago Team</p>
-  
-  <hr style="border: none; border-top: 1px solid #eeeeee; margin: 20px 0;">
-  
-  <p style="font-size: 12px; color: #666666;">PotteryChicago | Building a Community Around Pottery in Chicago</p>
+  <p>The Pottery Loop</p>
 </body>
 </html>
   `.trim();
@@ -248,22 +243,18 @@ function formatEmailBody(name, email, offer, bookingsUrl) {
 function formatEmailBodyText(name, email, offer, bookingsUrl) {
   return `Hi ${name},
 
-Thank you for participating in our pottery wheel game. Here is your discount code:
+Your discount code for your pottery class booking:
 
 ${offer.label}
 
-Your discount code: ${offer.code}
+Code: ${offer.code}
 
-You can use this code when booking your class: ${bookingsUrl}
+Booking link: ${bookingsUrl}
 
-This code is valid for 24 hours.
+Valid for 24 hours.
 
-Happy holidays and we hope to see you soon!
+Happy holidays!
 
-Best regards,
-The PotteryChicago Team
-
----
-PotteryChicago | Building a Community Around Pottery in Chicago`.trim();
+The Pottery Loop`.trim();
 }
 
