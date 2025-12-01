@@ -43,22 +43,84 @@ function CyberMonday() {
     setResult(null)
 
     try {
-      // TEMPORARILY DISABLED: AWS API call paused for testing
-      // Simulate a result to show the pottery wheel animation
-      const offers = [
-        { code: 'CANDLE5', label: 'Get $5 off our Ceramic Candles class', link: 'https://thepotteryloop.com' },
-        { code: 'CANDLE10', label: 'Get $10 off our Ceramic Candles class when you bring a friend', link: 'https://thepotteryloop.com' },
-        { code: 'WHEEL15', label: 'Get $15 off a Wheel Throwing Taster class', link: 'https://thepotteryloop.com' },
-        { code: 'WHEEL30', label: 'Get $30 off any multi-week Wheel course in January', link: 'https://thepotteryloop.com' },
-        { code: 'HAND10', label: 'Get $10 off a Handbuilding Date Night class', link: 'https://thepotteryloop.com' },
-        { code: 'HAND20', label: 'Get $20 off our Handbuilding & Wine evening class', link: 'https://thepotteryloop.com' },
-        { code: 'JAN30', label: 'Get $30 off any multi-week pottery course in January', link: 'https://thepotteryloop.com' },
-        { code: 'MYSTERY15', label: 'Mystery deal: Get $15 off any one pottery class of your choice', link: 'https://thepotteryloop.com' }
-      ]
+      // Get the base API URL and construct the cybermonday endpoint
+      const baseUrl = import.meta.env.VITE_AWS_API_URL || ''
+      let API_URL = ''
       
-      // Pick a random offer
-      const randomOffer = offers[Math.floor(Math.random() * offers.length)]
+      if (baseUrl) {
+        // Replace /booking with /cybermonday-play, or append /cybermonday-play if no /booking found
+        if (baseUrl.includes('/booking')) {
+          API_URL = baseUrl.replace('/booking', '/cybermonday-play')
+        } else {
+          // If the URL doesn't have /booking, try to append /cybermonday-play
+          API_URL = baseUrl.replace(/\/$/, '') + '/cybermonday-play'
+        }
+      }
       
+      if (!API_URL) {
+        // Fallback: simulate a result if API is not configured
+        if (import.meta.env.DEV) {
+          console.warn('API not configured. Cyber Monday data:', formData)
+        }
+        const offers = [
+          { code: 'CANDLE5', label: 'Get $5 off our Ceramic Candles class', link: 'https://thepotteryloop.com' },
+          { code: 'CANDLE10', label: 'Get $10 off our Ceramic Candles class when you bring a friend', link: 'https://thepotteryloop.com' },
+          { code: 'WHEEL15', label: 'Get $15 off a Wheel Throwing Taster class', link: 'https://thepotteryloop.com' },
+          { code: 'WHEEL30', label: 'Get $30 off any multi-week Wheel course in January', link: 'https://thepotteryloop.com' },
+          { code: 'HAND10', label: 'Get $10 off a Handbuilding Date Night class', link: 'https://thepotteryloop.com' },
+          { code: 'HAND20', label: 'Get $20 off our Handbuilding & Wine evening class', link: 'https://thepotteryloop.com' },
+          { code: 'JAN30', label: 'Get $30 off any multi-week pottery course in January', link: 'https://thepotteryloop.com' },
+          { code: 'MYSTERY15', label: 'Mystery deal: Get $15 off any one pottery class of your choice', link: 'https://thepotteryloop.com' }
+        ]
+        const randomOffer = offers[Math.floor(Math.random() * offers.length)]
+        
+        setTimeout(() => {
+          const wheelElement = document.querySelector('.pottery-wheel')
+          if (wheelElement) {
+            wheelElement.classList.add('fade-out')
+          }
+          setTimeout(() => {
+            setIsSpinning(false)
+            setResult({
+              success: true,
+              offerLabel: randomOffer.label,
+              code: randomOffer.code,
+              link: randomOffer.link
+            })
+            setIsSubmitting(false)
+          }, 500)
+        }, 3000)
+        return
+      }
+
+      const submissionData = {
+        name: formData.name,
+        email: formData.email,
+        consent: true
+      }
+      
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submissionData)
+      })
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        const errorMessage = errorData.message || `Server error: ${response.status} ${response.statusText}`
+        if (import.meta.env.DEV) {
+          console.error('API Error:', errorMessage, response)
+        }
+        throw new Error(errorMessage)
+      }
+      
+      const resultData = await response.json()
+      if (import.meta.env.DEV) {
+        console.log('Cyber Monday spin successful', resultData)
+      }
+
       // Simulate spinning animation (3 seconds for 3 full rotations)
       setTimeout(() => {
         // Start fade out
@@ -72,15 +134,13 @@ function CyberMonday() {
           setIsSpinning(false)
           setResult({
             success: true,
-            offerLabel: randomOffer.label,
-            code: randomOffer.code,
-            link: randomOffer.link
+            offerLabel: resultData.offerLabel,
+            code: resultData.code,
+            link: resultData.link || 'https://thepotteryloop.com'
           })
           setIsSubmitting(false)
         }, 500) // Wait for fade-out animation
       }, 3000)
-      
-      // TODO: Re-enable AWS API call when backend is ready
       /*
       // Get the base API URL and construct the cybermonday endpoint
       const baseUrl = import.meta.env.VITE_AWS_API_URL || ''
@@ -244,7 +304,7 @@ function CyberMonday() {
                 <div className="wheel-container">
                   <div className="wheel-background">
                     <img 
-                      src="https://i.imgur.com/nNmUtb0.png" 
+                      src="https://i.imgur.com/m0pnAZo.png" 
                       alt="Pottery wheel" 
                       className="wheel-bg-image"
                     />
