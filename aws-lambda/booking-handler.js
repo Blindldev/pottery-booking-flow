@@ -3,7 +3,7 @@
 
 const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-const ses = new AWS.SES({ region: 'us-east-1' }); // Change region if needed
+const ses = new AWS.SES({ region: 'us-east-2' }); // Updated to match API Gateway region
 
 const TABLE_NAME = process.env.BOOKINGS_TABLE_NAME || 'PotteryBookings';
 const FROM_EMAIL = 'PotteryChicago@gmail.com';
