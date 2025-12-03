@@ -6,10 +6,12 @@ function LandingPage() {
   return (
     <div className="landing-page">
       <div className="landing-container">
+        {/* Cyber Monday banner removed - keeping for future reference
         <Link to="/cybermonday" className="discount-banner">
           <span className="discount-banner-text">Cyber Monday Pottery Wheel!</span>
           <span className="discount-banner-arrow">→</span>
         </Link>
+        */}
         <header className="landing-header">
           <h1 className="landing-title">PotteryChicago</h1>
           <p className="landing-subtitle">Building a Community Around Pottery in Chicago</p>

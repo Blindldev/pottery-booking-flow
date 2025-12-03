@@ -85,7 +85,9 @@ function App() {
       <Route path="/collaborations" element={<CollaborationsPage />} />
       <Route path="/contact" element={<ContactPageWrapper />} />
       <Route path="/discount" element={<DiscountPageWrapper />} />
+      {/* Cyber Monday route removed - keeping component for future reference
       <Route path="/cybermonday" element={<CyberMondayPage />} />
+      */}
     </Routes>
   )
 }
