@@ -21,12 +21,12 @@ const STEPS = [
 
 function BookingFlow() {
   // Load saved state from localStorage on component mount
+  // Note: isSubmitted is never loaded from localStorage to prevent showing success message from previous sessions
   const getSavedState = () => {
     try {
       const savedStep = localStorage.getItem('bookingFlow_currentStep')
       const savedFormData = localStorage.getItem('bookingFlow_formData')
       const savedErrors = localStorage.getItem('bookingFlow_errors')
-      const savedSubmitted = localStorage.getItem('bookingFlow_isSubmitted')
       
       return {
         currentStep: savedStep ? parseInt(savedStep) : 0,
@@ -48,8 +48,7 @@ function BookingFlow() {
           },
           agreement: false
         },
-        errors: savedErrors ? JSON.parse(savedErrors) : {},
-        isSubmitted: savedSubmitted === 'true'
+        errors: savedErrors ? JSON.parse(savedErrors) : {}
       }
     } catch (error) {
       console.warn('Error loading saved state:', error)
@@ -74,18 +73,26 @@ function BookingFlow() {
           },
           agreement: false
         },
-        errors: {},
-        isSubmitted: false
+        errors: {}
       }
     }
   }
 
   const savedState = getSavedState()
+  // Always start with isSubmitted = false on component mount to prevent showing success message from previous sessions
   const [currentStep, setCurrentStep] = useState(savedState.currentStep)
   const [formData, setFormData] = useState(savedState.formData)
   const [errors, setErrors] = useState(savedState.errors)
-  const [isSubmitted, setIsSubmitted] = useState(savedState.isSubmitted)
+  const [isSubmitted, setIsSubmitted] = useState(false) // Never load submitted state from localStorage
   const [isSubmitting, setIsSubmitting] = useState(false)
+  
+  // Clear submitted state from localStorage on mount to prevent it from persisting
+  useEffect(() => {
+    const savedSubmitted = localStorage.getItem('bookingFlow_isSubmitted')
+    if (savedSubmitted === 'true') {
+      localStorage.removeItem('bookingFlow_isSubmitted')
+    }
+  }, [])
 
   // Clear saved state function
   const clearSavedState = () => {
