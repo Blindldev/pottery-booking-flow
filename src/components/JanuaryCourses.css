@@ -46,6 +46,40 @@
   line-height: 1.6;
 }
 
+.giftcard-notice {
+  margin: 0 0 2rem 0;
+  padding: 1.25rem 1.5rem;
+  background: rgba(197, 106, 70, 0.1);
+  border: 1px solid var(--color-accent-primary);
+  border-radius: 12px;
+  border-left: 4px solid var(--color-accent-primary);
+}
+
+.giftcard-notice-text {
+  font-size: 0.95rem;
+  color: var(--color-text-main);
+  line-height: 1.6;
+  margin: 0;
+  text-align: center;
+}
+
+.giftcard-notice-text strong {
+  color: var(--color-text-main);
+  font-weight: 600;
+}
+
+.giftcard-email-link {
+  color: var(--color-accent-primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.giftcard-email-link:hover {
+  color: #AA4C34;
+  text-decoration: underline;
+}
+
 .courses-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
