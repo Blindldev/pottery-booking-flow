@@ -108,6 +108,17 @@
   border-color: var(--color-accent-primary);
 }
 
+.course-card-disabled {
+  cursor: default;
+  opacity: 0.9;
+}
+
+.course-card-disabled:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--color-border);
+}
+
 .course-status-badges {
   width: 100%;
   margin-bottom: 0.75rem;
@@ -142,6 +153,7 @@
   border-radius: 12px;
   overflow: hidden;
   background: var(--color-surface);
+  position: relative;
 }
 
 .course-image {
@@ -149,6 +161,20 @@
   height: auto;
   display: block;
   object-fit: cover;
+}
+
+.course-status-banner {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.4rem 0.75rem;
+  background: #b3261e;
+  color: #fff;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  z-index: 2;
 }
 
 .course-day {

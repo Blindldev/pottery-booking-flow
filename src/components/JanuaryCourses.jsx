@@ -53,37 +53,38 @@ function JanuaryCourses({ onBack }) {
         </div>
         
         <div className="courses-grid">
-          {courses.map((course, index) => (
-            <a
-              key={index}
-              data-day={course.day}
-              href={course.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="course-card"
-            >
-              {course.day === 'Mondays' && (
-                <div className="course-status-badges">
-                  <div className="course-status-badge primary">
-                    Fully Booked
-                  </div>
-                  <div className="course-status-badge secondary">
-                    Next Matcha Course February 2026
-                  </div>
+          {courses.map((course, index) => {
+            const isMonday = course.day === 'Mondays'
+            const CardTag = isMonday ? 'div' : 'a'
+
+            return (
+              <CardTag
+                key={index}
+                data-day={course.day}
+                href={isMonday ? undefined : course.link}
+                target={isMonday ? undefined : '_blank'}
+                rel={isMonday ? undefined : 'noopener noreferrer'}
+                className={`course-card${isMonday ? ' course-card-disabled' : ''}`}
+                aria-disabled={isMonday ? 'true' : undefined}
+              >
+                <div className="course-image-container">
+                  {isMonday && (
+                    <div className="course-status-banner">
+                      Fully Booked
+                    </div>
+                  )}
+                  <img 
+                    src={course.image} 
+                    alt={course.day}
+                    className="course-image"
+                  />
                 </div>
-              )}
-              <div className="course-image-container">
-                <img 
-                  src={course.image} 
-                  alt={course.day}
-                  className="course-image"
-                />
-              </div>
-              <div className="course-day">{course.day}</div>
-              <div className="course-skill-level">{course.skillLevel}</div>
-              <div className="course-duration">{course.duration}</div>
-            </a>
-          ))}
+                <div className="course-day">{course.day}</div>
+                <div className="course-skill-level">{course.skillLevel}</div>
+                <div className="course-duration">{course.duration}</div>
+              </CardTag>
+            )
+          })}
         </div>
 
         <div className="discount-section">
