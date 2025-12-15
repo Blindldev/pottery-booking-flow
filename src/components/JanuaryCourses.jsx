@@ -41,17 +41,7 @@ function JanuaryCourses({ onBack }) {
         <button onClick={onBack} className="back-btn-studio">BACK</button>
         <h1>January 2026 Courses</h1>
         <p className="intro-text">Select a day to get more details about the course offering</p>
-        
-        <div className="giftcard-notice">
-          <p className="giftcard-notice-text">
-            <strong>Gift Card Redemption:</strong> If you purchased a gift card, please email{' '}
-            <a href="mailto:potterychicago@gmail.com" className="giftcard-email-link">
-              potterychicago@gmail.com
-            </a>{' '}
-            for redemption as we are currently updating our booking process.
-          </p>
-        </div>
-        
+
         <div className="courses-grid">
           {courses.map((course, index) => {
             const isMonday = course.day === 'Mondays'
@@ -113,6 +103,16 @@ function JanuaryCourses({ onBack }) {
               </p>
             </div>
           )}
+        </div>
+
+        <div className="giftcard-notice">
+          <p className="giftcard-notice-text">
+            <strong>Gift Card Redemption:</strong> If you purchased a gift card, please email{' '}
+            <a href="mailto:potterychicago@gmail.com" className="giftcard-email-link">
+              potterychicago@gmail.com
+            </a>{' '}
+            for redemption as we are currently updating our booking process.
+          </p>
         </div>
       </div>
     </div>
