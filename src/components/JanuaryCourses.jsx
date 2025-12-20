@@ -45,20 +45,22 @@ function JanuaryCourses({ onBack }) {
         <div className="courses-grid">
           {courses.map((course, index) => {
             const isMonday = course.day === 'Mondays'
-            const CardTag = isMonday ? 'div' : 'a'
+            const isSaturday = course.day === 'Saturdays'
+            const isFullyBooked = isMonday || isSaturday
+            const CardTag = isFullyBooked ? 'div' : 'a'
 
             return (
               <CardTag
                 key={index}
                 data-day={course.day}
-                href={isMonday ? undefined : course.link}
-                target={isMonday ? undefined : '_blank'}
-                rel={isMonday ? undefined : 'noopener noreferrer'}
-                className={`course-card${isMonday ? ' course-card-disabled' : ''}`}
-                aria-disabled={isMonday ? 'true' : undefined}
+                href={isFullyBooked ? undefined : course.link}
+                target={isFullyBooked ? undefined : '_blank'}
+                rel={isFullyBooked ? undefined : 'noopener noreferrer'}
+                className={`course-card${isFullyBooked ? ' course-card-disabled' : ''}`}
+                aria-disabled={isFullyBooked ? 'true' : undefined}
               >
                 <div className="course-image-container">
-                  {isMonday && (
+                  {isFullyBooked && (
                     <div className="course-status-banner">
                       Fully Booked
                     </div>
