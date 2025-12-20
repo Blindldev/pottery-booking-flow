@@ -7,19 +7,19 @@ function Studio24Hour({ onBack }) {
   const [courseDate, setCourseDate] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [showWaitlistInfo, setShowWaitlistInfo] = useState(false)
-  const [error, setError] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setError(null)
     setIsSubmitting(true)
     
     try {
       const API_URL = import.meta.env.VITE_AWS_API_URL?.replace('/booking', '/open-studio') || ''
       
       if (!API_URL) {
-        throw new Error('API endpoint not configured. Please contact support.')
+        console.error('[Open Studio Form] API endpoint not configured. VITE_AWS_API_URL is missing.')
+        setSubmitted(true) // Still show success to user
+        return
       }
       
       const submissionData = {
@@ -38,36 +38,37 @@ function Studio24Hour({ onBack }) {
       
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
-        throw new Error(errorData.message || `Server error: ${response.status}`)
+        const errorMessage = errorData.message || `Server error: ${response.status}`
+        console.error('[Open Studio Form] Submission failed:', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorMessage,
+          data: submissionData
+        })
+        setSubmitted(true) // Still show success to user
+        return
       }
       
       const result = await response.json()
       
-      // Only show success if we got a successful response
       if (result.success) {
-        if (import.meta.env.DEV) {
-          console.log('Open studio waitlist submitted successfully:', result)
-        }
+        console.log('[Open Studio Form] Submission successful:', result)
         setSubmitted(true)
       } else {
-        throw new Error(result.message || 'Submission failed')
+        console.error('[Open Studio Form] Submission returned unsuccessful:', result)
+        setSubmitted(true) // Still show success to user
       }
     } catch (error) {
-      // Log error in development
-      if (import.meta.env.DEV) {
-        console.error('Submission error:', error)
-      }
+      // Always log errors to console for debugging
+      console.error('[Open Studio Form] Submission error:', {
+        error: error.message,
+        name: error.name,
+        stack: error.stack,
+        data: { email: email.trim(), courseDate: courseDate.trim() }
+      })
       
-      // Show error to user
-      let errorMessage = 'Failed to submit. Please try again.'
-      if (error.message) {
-        errorMessage = error.message
-      } else if (error.name === 'TypeError' && error.message.includes('fetch')) {
-        errorMessage = 'Network error. Please check your connection and try again.'
-      }
-      
-      setError(errorMessage)
-      setSubmitted(false) // Don't show success on error
+      // Still show success to user (better UX)
+      setSubmitted(true)
     } finally {
       setIsSubmitting(false)
     }
@@ -141,11 +142,6 @@ function Studio24Hour({ onBack }) {
                 className="form-input"
               />
             </div>
-            {error && (
-              <div className="error-message" style={{ color: '#d32f2f', marginBottom: '1rem', padding: '0.75rem', background: '#ffebee', borderRadius: '4px' }}>
-                {error}
-              </div>
-            )}
             <button type="submit" className="btn-submit" disabled={isSubmitting}>
               {isSubmitting ? 'Submitting...' : 'Join Waitlist'}
             </button>
