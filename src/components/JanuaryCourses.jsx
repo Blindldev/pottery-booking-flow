@@ -45,8 +45,8 @@ function JanuaryCourses({ onBack }) {
         <div className="courses-grid">
           {courses.map((course, index) => {
             const isMonday = course.day === 'Mondays'
-            const isSaturday = course.day === 'Saturdays'
-            const isFullyBooked = isMonday || isSaturday
+            const isSunday = course.day === 'Sundays'
+            const isFullyBooked = isMonday || isSunday
             const CardTag = isFullyBooked ? 'div' : 'a'
 
             return (
