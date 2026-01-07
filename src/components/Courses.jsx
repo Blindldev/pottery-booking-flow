@@ -17,7 +17,7 @@ function Courses({ onBack }) {
       name: '[Tuesdays] 6 week Course',
       image: 'https://i.imgur.com/hOXbuap.png',
       link: 'https://square.link/u/nohm8WvV',
-      skillLevel: 'Intermediate',
+      skillLevel: 'Beginner',
       duration: '6 week intro course',
       startDate: 'Tuesday January 27th'
     },
@@ -60,6 +60,17 @@ function Courses({ onBack }) {
               <div className="course-start-date">Starts: {course.startDate}</div>
             </a>
           ))}
+        </div>
+
+        <div className="intermediate-notice">
+          <a 
+            href="https://www.instagram.com/Potterychicago" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="intermediate-button"
+          >
+            All current offerings are beginner, DM for intermediate
+          </a>
         </div>
 
         <div className="discount-section">

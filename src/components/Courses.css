@@ -159,6 +159,34 @@
   display: block;
 }
 
+.intermediate-notice {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.intermediate-button {
+  display: inline-block;
+  padding: 0.875rem 1.5rem;
+  background: var(--color-accent-primary);
+  color: white;
+  text-decoration: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.intermediate-button:hover {
+  background: #AA4C34;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(197, 106, 70, 0.3);
+}
+
+.intermediate-button:active {
+  transform: translateY(0);
+}
+
 .discount-section {
   margin-top: 2.5rem;
   padding-top: 2rem;
