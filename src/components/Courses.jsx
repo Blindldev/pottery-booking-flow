@@ -23,7 +23,7 @@ function Courses({ onBack }) {
     },
     {
       name: 'Wacky Wednesdays Handbuilding Course',
-      image: 'https://i.imgur.com/07bj5iK.png',
+      image: 'https://i.imgur.com/meBD8ZF.png',
       link: 'https://square.link/u/V9k0oImM',
       skillLevel: 'Beginner',
       duration: '5 week All Handbuilding Course',
