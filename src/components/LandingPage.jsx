@@ -38,7 +38,7 @@ function LandingPage() {
             <div className="link-card-content">
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                 <h2 className="link-title">Current Courses</h2>
-                <span className="new-tag">New Added</span>
+                <span className="new-tag">New Options Added</span>
               </div>
               <p className="link-subtitle"></p>
             </div>
