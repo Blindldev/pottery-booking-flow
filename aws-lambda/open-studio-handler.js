@@ -1,4 +1,4 @@
-// AWS Lambda function to handle contact form submissions
+// AWS Lambda function to handle open studio waitlist submissions
 // Uses AWS SDK v3 (Node.js 20.x)
 
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
@@ -9,7 +9,7 @@ const dynamoClient = new DynamoDBClient({ region: 'us-east-2' });
 const docClient = DynamoDBDocumentClient.from(dynamoClient);
 const sesClient = new SESClient({ region: 'us-east-2' });
 
-const TABLE_NAME = process.env.CONTACT_TABLE_NAME || 'ContactMessages';
+const TABLE_NAME = process.env.OPEN_STUDIO_TABLE_NAME || 'OpenStudioWaitlist';
 const FROM_EMAIL = 'Create@potterychicago.com'; // Verified sender email (case-sensitive)
 const TO_EMAIL = 'PotteryChicago@gmail.com';
 
@@ -31,16 +31,17 @@ exports.handler = async (event) => {
 
     try {
         const body = typeof event.body === 'string' ? JSON.parse(event.body) : event.body;
-        const contactData = body;
+        const waitlistData = body;
         
-        const messageId = `MSG-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
+        const waitlistId = `OS-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
         const timestamp = new Date().toISOString();
 
         const dbItem = {
-            messageId,
+            waitlistId,
             timestamp,
-            ...contactData,
-            status: 'new'
+            email: waitlistData.email || '',
+            courseDate: waitlistData.courseDate || '',
+            status: 'pending'
         };
 
         await docClient.send(new PutCommand({
@@ -48,8 +49,8 @@ exports.handler = async (event) => {
             Item: dbItem
         }));
 
-        const emailBody = formatEmailBody(contactData, messageId);
-        const emailSubject = `New Contact Message from ${contactData.name || 'Unknown'}`;
+        const emailBody = formatEmailBody(waitlistData, waitlistId);
+        const emailSubject = `New Open Studio Waitlist Request: ${waitlistData.email || 'Unknown'}`;
 
         await sesClient.send(new SendEmailCommand({
             Source: FROM_EMAIL,
@@ -67,7 +68,7 @@ exports.handler = async (event) => {
                         Charset: 'UTF-8'
                     },
                     Text: {
-                        Data: formatEmailBodyText(contactData, messageId),
+                        Data: formatEmailBodyText(waitlistData, waitlistId),
                         Charset: 'UTF-8'
                     }
                 }
@@ -79,26 +80,26 @@ exports.handler = async (event) => {
             headers,
             body: JSON.stringify({
                 success: true,
-                message: 'Message sent successfully',
-                messageId
+                message: 'Waitlist request submitted successfully',
+                waitlistId
             })
         };
 
     } catch (error) {
-        console.error('Error processing contact message:', error);
+        console.error('Error processing waitlist request:', error);
         return {
             statusCode: 500,
             headers,
             body: JSON.stringify({
                 success: false,
-                message: 'Failed to send message',
+                message: 'Failed to process waitlist request',
                 error: error.message
             })
         };
     }
 };
 
-function formatEmailBody(data, messageId) {
+function formatEmailBody(data, waitlistId) {
     return `
         <!DOCTYPE html>
         <html>
@@ -110,27 +111,19 @@ function formatEmailBody(data, messageId) {
                 .content { padding: 20px; background-color: #f9f9f9; }
                 .section { margin-bottom: 20px; padding: 15px; background-color: white; border-radius: 4px; }
                 .label { font-weight: bold; color: #C56A46; }
-                .message-box { background-color: #f0f0f0; padding: 15px; border-radius: 8px; border-left: 4px solid #C56A46; margin-top: 10px; }
             </style>
         </head>
         <body>
             <div class="container">
                 <div class="header">
-                    <h1>New Contact Message</h1>
-                    <p>Message ID: ${messageId}</p>
+                    <h1>New Open Studio Waitlist Request</h1>
+                    <p>Waitlist ID: ${waitlistId}</p>
                 </div>
                 <div class="content">
                     <div class="section">
                         <h2>Contact Information</h2>
-                        <p><span class="label">Name:</span> ${data.name || 'N/A'}</p>
                         <p><span class="label">Email:</span> ${data.email || 'N/A'}</p>
-                    </div>
-                    
-                    <div class="section">
-                        <h2>Message</h2>
-                        <div class="message-box">
-                            ${(data.message || 'N/A').replace(/\n/g, '<br>')}
-                        </div>
+                        <p><span class="label">Course Date:</span> ${data.courseDate || 'N/A'}</p>
                     </div>
                     
                     <div class="section">
@@ -143,19 +136,18 @@ function formatEmailBody(data, messageId) {
     `;
 }
 
-function formatEmailBodyText(data, messageId) {
+function formatEmailBodyText(data, waitlistId) {
     return `
-New Contact Message
-Message ID: ${messageId}
+New Open Studio Waitlist Request
+Waitlist ID: ${waitlistId}
 
 CONTACT INFORMATION
-Name: ${data.name || 'N/A'}
 Email: ${data.email || 'N/A'}
-
-MESSAGE
-${data.message || 'N/A'}
+Course Date: ${data.courseDate || 'N/A'}
 
 Submitted At: ${new Date(data.submittedAt || Date.now()).toLocaleString()}
     `.trim();
 }
+
+
 

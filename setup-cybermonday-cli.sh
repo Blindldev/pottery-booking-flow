@@ -298,3 +298,7 @@ echo "  1. Verify create@potterychicago.com in SES (us-east-2)"
 echo "  2. If SES is in sandbox mode, verify recipient emails too"
 echo ""
 
+
+
+
+

@@ -11,7 +11,7 @@ const docClient = DynamoDBDocumentClient.from(dynamoClient);
 const sesClient = new SESClient({ region: 'us-east-2' });
 
 const TABLE_NAME = process.env.CYBERMONDAY_TABLE_NAME || 'CyberMondayGamePlays';
-const FROM_EMAIL = 'The Pottery Loop <create@potterychicago.com>';
+const FROM_EMAIL = 'The Pottery Loop <Create@potterychicago.com>'; // Verified sender email (case-sensitive)
 const TO_EMAIL = 'PotteryChicago@gmail.com';
 const BOOKINGS_URL = process.env.BOOKINGS_URL || 'https://ThePotteryLoop.com';
 

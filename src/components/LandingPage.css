@@ -215,6 +215,10 @@
   background-image: url('https://i.imgur.com/y2sqrT2.jpeg');
 }
 
+.link-card-friendwork-social {
+  background-image: url('https://i.imgur.com/7mHAzVS.jpeg');
+}
+
 .link-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 20px rgba(197, 106, 70, 0.12);
@@ -255,6 +259,20 @@
 
 .link-card:hover .link-title {
   background: transparent;
+}
+
+.new-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: white;
+  background: var(--color-accent-primary, #c56a46);
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .link-subtitle {

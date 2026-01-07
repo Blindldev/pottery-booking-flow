@@ -10,7 +10,7 @@ const docClient = DynamoDBDocumentClient.from(dynamoClient);
 const sesClient = new SESClient({ region: 'us-east-2' });
 
 const TABLE_NAME = process.env.COLLABORATIONS_TABLE_NAME || 'Collaborations';
-const FROM_EMAIL = 'create@potterychicago.com';
+const FROM_EMAIL = 'Create@potterychicago.com'; // Verified sender email (case-sensitive)
 const TO_EMAIL = 'PotteryChicago@gmail.com';
 
 exports.handler = async (event) => {

@@ -1,112 +1,19 @@
-// AWS Lambda function to handle booking submissions
-// This function stores booking data and sends confirmation email
-// Updated for AWS SDK v3 (Node.js 20.x)
+// Script to manually send email notification for missed bookings
+// This will send emails for bookings that were stored but notifications weren't sent
 
-const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { DynamoDBDocumentClient, PutCommand } = require('@aws-sdk/lib-dynamodb');
 const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient, ScanCommand } = require('@aws-sdk/lib-dynamodb');
 
+const sesClient = new SESClient({ region: 'us-east-2' });
 const dynamoClient = new DynamoDBClient({ region: 'us-east-2' });
 const docClient = DynamoDBDocumentClient.from(dynamoClient);
-const sesClient = new SESClient({ region: 'us-east-2' });
 
 const TABLE_NAME = process.env.BOOKINGS_TABLE_NAME || 'PotteryBookings';
 const FROM_EMAIL = 'Create@potterychicago.com'; // Verified sender email (case-sensitive)
-const TO_EMAIL = 'PotteryChicago@gmail.com'; // Recipient (doesn't need verification)
+const TO_EMAIL = 'PotteryChicago@gmail.com';
 
-exports.handler = async (event) => {
-    // Handle CORS
-    const headers = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Content-Type': 'application/json'
-    };
-
-    // Handle preflight OPTIONS request
-    if (event.requestContext?.http?.method === 'OPTIONS' || event.httpMethod === 'OPTIONS') {
-        return {
-            statusCode: 200,
-            headers,
-            body: JSON.stringify({ message: 'OK' })
-        };
-    }
-
-    try {
-        // Parse request body (handle both API Gateway v1 and v2 formats)
-        const body = typeof event.body === 'string' ? JSON.parse(event.body) : event.body;
-        const bookingData = body;
-        
-        // Generate unique booking ID
-        const bookingId = `BK-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
-        const timestamp = new Date().toISOString();
-
-        // Prepare data for DynamoDB
-        const dbItem = {
-            bookingId,
-            timestamp,
-            ...bookingData,
-            status: 'pending'
-        };
-
-        // Store in DynamoDB
-        await docClient.send(new PutCommand({
-            TableName: TABLE_NAME,
-            Item: dbItem
-        }));
-
-        // Format email content
-        const emailBody = formatEmailBody(bookingData, bookingId);
-        const emailSubject = `New Booking Request: ${bookingData.contact?.name || 'Unknown'} - ${bookingData.eventTypes?.join(', ') || 'Event'}`;
-
-        // Send email via SES
-        await sesClient.send(new SendEmailCommand({
-            Source: FROM_EMAIL,
-            Destination: {
-                ToAddresses: [TO_EMAIL]
-            },
-            Message: {
-                Subject: {
-                    Data: emailSubject,
-                    Charset: 'UTF-8'
-                },
-                Body: {
-                    Html: {
-                        Data: emailBody,
-                        Charset: 'UTF-8'
-                    },
-                    Text: {
-                        Data: formatEmailBodyText(bookingData, bookingId),
-                        Charset: 'UTF-8'
-                    }
-                }
-            }
-        }));
-
-        return {
-            statusCode: 200,
-            headers,
-            body: JSON.stringify({
-                success: true,
-                message: 'Booking submitted successfully',
-                bookingId
-            })
-        };
-
-    } catch (error) {
-        console.error('Error processing booking:', error);
-        return {
-            statusCode: 500,
-            headers,
-            body: JSON.stringify({
-                success: false,
-                message: 'Failed to process booking',
-                error: error.message
-            })
-        };
-    }
-};
-
+// Import the email formatting functions from the Lambda handler
 function formatEmailBody(bookingData, bookingId) {
     const contact = bookingData.contact || {};
     const eventTypes = bookingData.eventTypes || [];
@@ -141,6 +48,7 @@ function formatEmailBody(bookingData, bookingId) {
                 table { width: 100%; border-collapse: collapse; margin-top: 10px; }
                 th { background-color: #C56A46; color: white; padding: 10px; text-align: left; }
                 .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
+                .notice { background-color: #fff3cd; border: 1px solid #ffc107; padding: 10px; margin-bottom: 20px; border-radius: 4px; }
             </style>
         </head>
         <body>
@@ -150,6 +58,10 @@ function formatEmailBody(bookingData, bookingId) {
                     <p>Booking ID: ${bookingId}</p>
                 </div>
                 <div class="content">
+                    <div class="notice">
+                        <strong>⚠️ Delayed Notification:</strong> This booking was submitted but the initial email notification failed. 
+                        This is a manually sent notification.
+                    </div>
                     <div class="section">
                         <h2>Contact Information</h2>
                         <p><span class="label">Name:</span> ${contact.name || 'N/A'}</p>
@@ -193,7 +105,7 @@ function formatEmailBody(bookingData, bookingId) {
                     </div>
                     
                     <div class="section">
-                        <p><span class="label">Submitted At:</span> ${new Date(bookingData.submittedAt || Date.now()).toLocaleString()}</p>
+                        <p><span class="label">Submitted At:</span> ${new Date(bookingData.submittedAt || bookingData.timestamp || Date.now()).toLocaleString()}</p>
                     </div>
                 </div>
                 <div class="footer">
@@ -208,12 +120,12 @@ function formatEmailBody(bookingData, bookingId) {
 function formatEmailBodyText(bookingData, bookingId) {
     const contact = bookingData.contact || {};
     const eventTypes = bookingData.eventTypes || [];
-    const workshops = bookingData.workshops || [];
     const dates = bookingData.dates || [];
     const workshopEstimates = bookingData.workshopEstimates || [];
     const totalEstimate = bookingData.totalEstimate || 0;
 
-    let text = `New Booking Request\n`;
+    let text = `⚠️ DELAYED NOTIFICATION: This booking was submitted but the initial email notification failed.\n\n`;
+    text += `New Booking Request\n`;
     text += `Booking ID: ${bookingId}\n\n`;
     text += `Contact Information:\n`;
     text += `  Name: ${contact.name || 'N/A'}\n`;
@@ -240,8 +152,127 @@ function formatEmailBodyText(bookingData, bookingId) {
     });
     text += `\nPricing Summary:\n`;
     text += `  Total Estimate: $${totalEstimate.toLocaleString()}\n`;
-    text += `\nSubmitted At: ${new Date(bookingData.submittedAt || Date.now()).toLocaleString()}\n`;
+    text += `\nSubmitted At: ${new Date(bookingData.submittedAt || bookingData.timestamp || Date.now()).toLocaleString()}\n`;
     
     return text;
 }
+
+async function sendBookingEmail(booking) {
+    try {
+        const bookingId = booking.bookingId;
+        const emailSubject = `[DELAYED] New Booking Request: ${booking.contact?.name || 'Unknown'} - ${booking.eventTypes?.join(', ') || 'Event'}`;
+        
+        const emailBody = formatEmailBody(booking, bookingId);
+        const emailBodyText = formatEmailBodyText(booking, bookingId);
+
+        await sesClient.send(new SendEmailCommand({
+            Source: FROM_EMAIL,
+            Destination: {
+                ToAddresses: [TO_EMAIL]
+            },
+            Message: {
+                Subject: {
+                    Data: emailSubject,
+                    Charset: 'UTF-8'
+                },
+                Body: {
+                    Html: {
+                        Data: emailBody,
+                        Charset: 'UTF-8'
+                    },
+                    Text: {
+                        Data: emailBodyText,
+                        Charset: 'UTF-8'
+                    }
+                }
+            }
+        }));
+
+        console.log(`✅ Email sent successfully for booking ${bookingId}`);
+        return true;
+    } catch (error) {
+        console.error(`❌ Failed to send email for booking ${booking.bookingId}:`, error.message);
+        return false;
+    }
+}
+
+async function main() {
+    const args = process.argv.slice(2);
+    
+    if (args.length > 0 && args[0] === '--all') {
+        // Send emails for all recent bookings (last 7 days)
+        console.log('Checking all recent bookings...\n');
+        
+        const result = await docClient.send(new ScanCommand({
+            TableName: TABLE_NAME
+        }));
+
+        if (!result.Items || result.Items.length === 0) {
+            console.log('No bookings found.');
+            return;
+        }
+
+        // Filter bookings from last 7 days
+        const sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+        const recentBookings = result.Items.filter(booking => {
+            const timestamp = new Date(booking.timestamp || booking.bookingId || 0).getTime();
+            return timestamp >= sevenDaysAgo;
+        }).sort((a, b) => {
+            const timeA = new Date(a.timestamp || a.bookingId || 0).getTime();
+            const timeB = new Date(b.timestamp || b.bookingId || 0).getTime();
+            return timeB - timeA;
+        });
+
+        console.log(`Found ${recentBookings.length} bookings from the last 7 days.\n`);
+        console.log('⚠️  WARNING: This will send emails for ALL recent bookings.');
+        console.log('Press Ctrl+C to cancel, or wait 5 seconds to continue...\n');
+        
+        await new Promise(resolve => setTimeout(resolve, 5000));
+
+        let successCount = 0;
+        let failCount = 0;
+
+        for (const booking of recentBookings) {
+            const success = await sendBookingEmail(booking);
+            if (success) successCount++;
+            else failCount++;
+            
+            // Small delay between emails
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+
+        console.log(`\n📊 Summary: ${successCount} sent, ${failCount} failed`);
+    } else {
+        // Send email for specific booking (mmcalisteryoung@gmail.com)
+        console.log('Looking for booking from mmcalisteryoung@gmail.com...\n');
+        
+        const result = await docClient.send(new ScanCommand({
+            TableName: TABLE_NAME
+        }));
+
+        const targetBooking = result.Items.find(b => {
+            const email = (b.contact || {}).email || '';
+            return email.toLowerCase().includes('mmcalisteryoung');
+        });
+
+        if (!targetBooking) {
+            console.log('❌ Booking not found for mmcalisteryoung@gmail.com');
+            return;
+        }
+
+        console.log(`Found booking: ${targetBooking.bookingId}`);
+        console.log(`Name: ${targetBooking.contact?.name || 'N/A'}`);
+        console.log(`Email: ${targetBooking.contact?.email || 'N/A'}`);
+        console.log(`Date: ${targetBooking.timestamp}\n`);
+
+        const success = await sendBookingEmail(targetBooking);
+        if (success) {
+            console.log('\n✅ Email notification sent successfully!');
+        } else {
+            console.log('\n❌ Failed to send email. Check AWS SES configuration.');
+        }
+    }
+}
+
+main().catch(console.error);
 

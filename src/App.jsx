@@ -7,6 +7,7 @@ import InstructorApplication from './components/InstructorApplication'
 import CollaborationsForm from './components/CollaborationsForm'
 import ContactPage from './components/ContactPage'
 import JanuaryCourses from './components/JanuaryCourses'
+import Courses from './components/Courses'
 import DiscountPage from './components/DiscountPage'
 import CyberMonday from './components/CyberMonday'
 import './App.css'
@@ -64,6 +65,12 @@ function JanuaryCoursesPage() {
   return <JanuaryCourses onBack={() => navigate('/')} />
 }
 
+function CoursesPage() {
+  const navigate = useNavigate()
+
+  return <Courses onBack={() => navigate('/')} />
+}
+
 function DiscountPageWrapper() {
   const navigate = useNavigate()
 
@@ -79,6 +86,7 @@ function App() {
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/january-courses" element={<JanuaryCoursesPage />} />
+      <Route path="/courses" element={<CoursesPage />} />
       <Route path="/private-bookings" element={<BookingPage />} />
       <Route path="/open-studio" element={<Studio24Page />} />
       <Route path="/teach" element={<TeachPage />} />

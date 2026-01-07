@@ -32,15 +32,31 @@ function LandingPage() {
           </a>
 
           <Link 
-            to="/january-courses"
+            to="/courses"
             className="link-card link-card-january-courses"
           >
             <div className="link-card-content">
-              <h2 className="link-title">January 2026 courses</h2>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                <h2 className="link-title">Current Courses</h2>
+                <span className="new-tag">New Added</span>
+              </div>
               <p className="link-subtitle"></p>
             </div>
             <div className="link-arrow">→</div>
           </Link>
+
+          <a 
+            href="https://checkout.square.site/merchant/MLNSXCSTTDJ0C/checkout/2BV4UL7MOQG63ERFML6N3FIO" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="link-card link-card-friendwork-social"
+          >
+            <div className="link-card-content">
+              <h2 className="link-title">The Friendwork Collective Social</h2>
+              <p className="link-subtitle"></p>
+            </div>
+            <div className="link-arrow">→</div>
+          </a>
 
           <Link 
             to="/private-bookings"
