@@ -76,7 +76,7 @@ function Courses({ onBack }) {
         <div className="discount-section">
           <button 
             onClick={() => setShowDiscountInfo(!showDiscountInfo)}
-            className="discount-button"
+            className="discount-link"
           >
             How to apply discount
           </button>

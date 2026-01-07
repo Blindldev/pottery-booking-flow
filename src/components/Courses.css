@@ -193,28 +193,22 @@
   border-top: 1px solid var(--color-border);
 }
 
-.discount-button {
-  width: 100%;
-  padding: 1rem 2rem;
-  background: var(--color-accent-primary);
-  color: white;
+.discount-link {
+  background: none;
   border: none;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 600;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  font-weight: 400;
   cursor: pointer;
-  transition: all 0.3s ease;
+  text-decoration: underline;
+  padding: 0;
+  margin: 0;
   font-family: inherit;
+  transition: color 0.2s ease;
 }
 
-.discount-button:hover {
-  background: #AA4C34;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(197, 106, 70, 0.3);
-}
-
-.discount-button:active {
-  transform: translateY(0);
+.discount-link:hover {
+  color: var(--color-accent-primary);
 }
 
 .discount-info {
