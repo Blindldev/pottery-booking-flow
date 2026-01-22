@@ -19,7 +19,7 @@ function Courses({ onBack }) {
       link: 'https://square.link/u/V9k0oImM',
       skillLevel: 'Beginner',
       duration: '5 week All Handbuilding Course',
-      startDate: 'Wednesday February 4th'
+      startDate: 'Wednesday February 4th, 6:30pm'
     },
     {
       name: 'Wednesday 5 week Pottery Course',
@@ -28,7 +28,7 @@ function Courses({ onBack }) {
       skillLevel: 'Beginner',
       duration: '5 week pottery course',
       price: '$185',
-      startDate: 'Wednesday'
+      startDate: 'Wednesday February 4th, 7pm'
     }
   ]
 
