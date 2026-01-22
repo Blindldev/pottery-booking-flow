@@ -14,20 +14,21 @@ function Courses({ onBack }) {
       startDate: 'Monday February 2nd'
     },
     {
-      name: '[Tuesdays] 6 week Course',
-      image: 'https://i.imgur.com/hOXbuap.png',
-      link: 'https://square.link/u/nohm8WvV',
-      skillLevel: 'Beginner',
-      duration: '6 week intro course',
-      startDate: 'Tuesday January 27th'
-    },
-    {
       name: 'Wacky Wednesdays Handbuilding Course',
       image: 'https://i.imgur.com/meBD8ZF.png',
       link: 'https://square.link/u/V9k0oImM',
       skillLevel: 'Beginner',
       duration: '5 week All Handbuilding Course',
       startDate: 'Wednesday February 4th'
+    },
+    {
+      name: 'Wednesday 5 week Pottery Course',
+      image: 'https://i.imgur.com/hOXbuap.png',
+      link: 'https://square.link/u/QqgwSVoH',
+      skillLevel: 'Beginner',
+      duration: '5 week pottery course',
+      price: '$185',
+      startDate: 'Wednesday'
     }
   ]
 
@@ -57,6 +58,7 @@ function Courses({ onBack }) {
               <div className="course-day">{course.name}</div>
               <div className="course-skill-level">{course.skillLevel}</div>
               <div className="course-duration">{course.duration}</div>
+              {course.price && <div className="course-price">{course.price}</div>}
               <div className="course-start-date">Starts: {course.startDate}</div>
             </a>
           ))}
