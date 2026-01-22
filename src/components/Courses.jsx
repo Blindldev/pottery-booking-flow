@@ -22,7 +22,7 @@ function Courses({ onBack }) {
       startDate: 'Wednesday February 4th, 6:30pm'
     },
     {
-      name: 'Wednesday 5 week Pottery Course',
+      name: 'Wednesday 5 Week Pottery Wheel Course',
       image: 'https://i.imgur.com/hOXbuap.png',
       link: 'https://square.link/u/QqgwSVoH',
       skillLevel: 'Beginner',
