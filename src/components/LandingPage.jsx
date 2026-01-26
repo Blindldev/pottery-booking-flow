@@ -45,19 +45,6 @@ function LandingPage() {
             <div className="link-arrow">→</div>
           </Link>
 
-          <a 
-            href="https://checkout.square.site/merchant/MLNSXCSTTDJ0C/checkout/2BV4UL7MOQG63ERFML6N3FIO" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="link-card link-card-friendwork-social"
-          >
-            <div className="link-card-content">
-              <h2 className="link-title">The Friendwork Collective Social</h2>
-              <p className="link-subtitle"></p>
-            </div>
-            <div className="link-arrow">→</div>
-          </a>
-
           <Link 
             to="/private-bookings"
             className="link-card link-card-private-bookings"
