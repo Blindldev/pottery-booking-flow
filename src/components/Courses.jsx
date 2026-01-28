@@ -22,13 +22,13 @@ function Courses({ onBack }) {
       startDate: 'Wednesday February 4th, 6:30pm'
     },
     {
-      name: 'Wednesday 5 Week Pottery Wheel Course',
+      name: '[Wednesday] 6 Week Pottery Course',
       image: 'https://i.imgur.com/hOXbuap.png',
       link: 'https://square.link/u/QqgwSVoH',
       skillLevel: 'Beginner',
-      duration: '5 week pottery course',
-      price: '$185',
-      startDate: 'Wednesday February 4th, 7pm'
+      duration: '6 week pottery course',
+      price: '$210',
+      startDate: 'Wednesday February 11th, 7pm'
     }
   ]
 
