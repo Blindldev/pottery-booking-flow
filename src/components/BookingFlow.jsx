@@ -9,6 +9,8 @@ import ReviewStep from './steps/ReviewStep'
 import SuccessStep from './steps/SuccessStep'
 import { validateStep, getWorkshopConstraints, calculatePricing, getEffectiveGroupSize } from '../utils/validation'
 
+const INACTIVITY_RESTART_MS = 15 * 60 * 1000 // 15 minutes
+
 const STEPS = [
   { id: 'eventType', title: '🎨 Choose Your Event Type', emoji: '🎨', component: EventTypeStep },
   { id: 'groupSize', title: '👥 Gather Your Group', emoji: '👥', component: GroupSizeStep },
@@ -90,6 +92,26 @@ function BookingFlow() {
   const [isSubmitted, setIsSubmitted] = useState(false) // Never load submitted state from localStorage
   const [isSubmitting, setIsSubmitting] = useState(false)
   const submitErrorRef = useRef(null)
+  const lastActivityRef = useRef(Date.now())
+
+  const touchActivity = () => {
+    lastActivityRef.current = Date.now()
+  }
+
+  // Restart form after 15 minutes of no user action
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (isSubmitted || isSubmitting) return
+      if (Date.now() - lastActivityRef.current >= INACTIVITY_RESTART_MS) {
+        clearSavedState()
+        setFormData({ ...DEFAULT_FORM_DATA })
+        setCurrentStep(0)
+        setErrors({})
+        lastActivityRef.current = Date.now()
+      }
+    }, 60000) // check every minute
+    return () => clearInterval(interval)
+  }, [isSubmitted, isSubmitting])
 
   // Scroll submit error into view when it appears
   useEffect(() => {
@@ -153,6 +175,7 @@ function BookingFlow() {
   }
 
   const updateFormData = (field, value) => {
+    touchActivity()
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -168,6 +191,7 @@ function BookingFlow() {
   }
 
   const updateContactData = (field, value) => {
+    touchActivity()
     setFormData(prev => ({
       ...prev,
       contact: {
@@ -189,6 +213,7 @@ function BookingFlow() {
   }
 
   const nextStep = () => {
+    touchActivity()
     const stepId = STEPS[currentStep].id
     const stepErrors = validateStep(stepId, formData)
     
@@ -228,6 +253,7 @@ function BookingFlow() {
 
 
   const goToStep = (stepIndex) => {
+    touchActivity()
     // Allow navigation to current step, previous steps, or completed steps
     if (stepIndex <= currentStep || isStepCompleted(stepIndex)) {
       setCurrentStep(stepIndex)
@@ -268,6 +294,7 @@ function BookingFlow() {
   }
 
   const prevStep = () => {
+    touchActivity()
     const newStep = Math.max(currentStep - 1, 0)
     setCurrentStep(newStep)
     setErrors({})
@@ -277,6 +304,7 @@ function BookingFlow() {
   }
 
   const submitForm = async () => {
+    touchActivity()
     const normalized = normalizeFormData(formData)
     const finalErrors = validateStep('review', normalized)
     if (Object.keys(finalErrors).length > 0) {
