@@ -7,6 +7,8 @@ function ContactStep({ formData, errors, updateContactData }) {
         <label className="form-label">Name *</label>
         <input
           type="text"
+          name="name"
+          autoComplete="name"
           value={formData.contact.name}
           onChange={(e) => updateContactData('name', e.target.value)}
           className={`form-control ${errors.contact?.name ? 'error' : ''}`}
@@ -21,6 +23,9 @@ function ContactStep({ formData, errors, updateContactData }) {
         <label className="form-label">Phone *</label>
         <input
           type="tel"
+          name="phone"
+          autoComplete="tel"
+          inputMode="tel"
           value={formData.contact.phone}
           onChange={(e) => updateContactData('phone', e.target.value)}
           className={`form-control ${errors.contact?.phone ? 'error' : ''}`}
@@ -35,6 +40,9 @@ function ContactStep({ formData, errors, updateContactData }) {
         <label className="form-label">Email *</label>
         <input
           type="email"
+          name="email"
+          autoComplete="email"
+          inputMode="email"
           value={formData.contact.email}
           onChange={(e) => updateContactData('email', e.target.value)}
           className={`form-control ${errors.contact?.email ? 'error' : ''}`}

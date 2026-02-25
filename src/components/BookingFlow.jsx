@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import EventTypeStep from './steps/EventTypeStep'
 import GroupSizeStep from './steps/GroupSizeStep'
 import VenueStep from './steps/VenueStep'
@@ -85,7 +85,15 @@ function BookingFlow() {
   const [errors, setErrors] = useState(savedState.errors)
   const [isSubmitted, setIsSubmitted] = useState(false) // Never load submitted state from localStorage
   const [isSubmitting, setIsSubmitting] = useState(false)
-  
+  const submitErrorRef = useRef(null)
+
+  // Scroll submit error into view when it appears
+  useEffect(() => {
+    if (errors.submit && submitErrorRef.current) {
+      submitErrorRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
+  }, [errors.submit])
+
   // Clear submitted state from localStorage on mount to prevent it from persisting
   useEffect(() => {
     const savedSubmitted = localStorage.getItem('bookingFlow_isSubmitted')
@@ -269,12 +277,8 @@ function BookingFlow() {
   }
 
   const submitForm = async () => {
-    console.log('Submit button clicked!')
-    console.log('Current form data:', formData)
-    
     const finalErrors = validateStep('review', formData)
-    console.log('Validation errors:', finalErrors)
-    
+
     if (Object.keys(finalErrors).length > 0) {
       setErrors(finalErrors)
       return
@@ -314,54 +318,47 @@ function BookingFlow() {
     try {
       // Check if API is configured
       const API_URL = import.meta.env.VITE_AWS_API_URL
-      
-      if (API_URL) {
-        // Send to AWS API Gateway
-        const response = await fetch(API_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(submissionData)
+
+      if (!API_URL) {
+        setErrors({
+          submit: 'The form could not be sent right now. Please email us at potteryupdates@gmail.com with your event details and we\'ll get back to you.'
         })
-        
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}))
-          throw new Error(errorData.message || `Server error: ${response.status}`)
-        }
-        
-        const result = await response.json()
-        if (import.meta.env.DEV) {
-          console.log('Booking submitted successfully')
-        }
-      } else {
-        // Fallback: log to console if API not configured (dev only)
-        if (import.meta.env.DEV) {
-          console.log('API not configured. Booking data:', submissionData)
-          console.warn('To enable AWS integration, set VITE_AWS_API_URL in your .env file')
-        }
+        setIsSubmitting(false)
+        return
       }
-      
+
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submissionData)
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.message || `Server error: ${response.status}`)
+      }
+
+      const result = await response.json()
+
       setIsSubmitted(true)
-      
-      // Clear saved state after successful submission
+
       try {
         localStorage.removeItem('bookingFlow_currentStep')
         localStorage.removeItem('bookingFlow_formData')
         localStorage.removeItem('bookingFlow_errors')
         localStorage.removeItem('bookingFlow_isSubmitted')
-      } catch (error) {
-        console.warn('Error clearing saved state:', error)
+      } catch (e) {
+        console.warn('Error clearing saved state:', e)
       }
     } catch (error) {
-      if (import.meta.env.DEV) {
-        console.error('Submission error:', error)
-      }
-      const errorMessage = error.message || 'Failed to submit form. Please try again.'
-      setErrors({ submit: errorMessage })
-      // Still show success to user, but log the error
-      // This prevents user frustration if AWS is temporarily down
-      setIsSubmitted(true)
+      const isNetwork = error.name === 'TypeError' && (error.message.includes('fetch') || error.message.includes('network'))
+      const message = isNetwork
+        ? 'Connection problem. Please check your internet and try again, or email us at potteryupdates@gmail.com with your event details.'
+        : (error.message || 'Something went wrong. Please try again or email potteryupdates@gmail.com with your event details.')
+      setErrors({ submit: message })
+      setIsSubmitted(false)
     } finally {
       setIsSubmitting(false)
     }
@@ -465,7 +462,7 @@ function BookingFlow() {
         />
         
         {errors.submit && (
-          <div className="submit-error">
+          <div ref={submitErrorRef} className="submit-error" role="alert">
             {errors.submit}
           </div>
         )}

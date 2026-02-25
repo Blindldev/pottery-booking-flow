@@ -109,7 +109,7 @@ function ReviewStep({ formData, errors, updateFormData }) {
               </li>
             ) : (
               // Show specific dates when no flexibility is selected
-              formData.dates.map(date => (
+              (formData.dates || []).map(date => (
                 <li key={date}>{formatDate(date)}</li>
               ))
             )}
@@ -136,20 +136,20 @@ function ReviewStep({ formData, errors, updateFormData }) {
         <h3>Workshop Estimates</h3>
         <p className="workshop-subtitle">Click on any section to view detailed pricing and information</p>
         
-        {formData.workshops.length > 1 && (
+        {(formData.workshops || []).length > 1 && (
           <div className="multiple-workshops-note">
             <strong>Note:</strong> You've selected multiple workshops. We'll follow up to confirm your final preference for the activity.
           </div>
         )}
         
-        {formData.eventTypes.map(eventType => (
+        {(formData.eventTypes || []).map(eventType => (
           <div key={eventType} className="event-type-section">
             <h4 className="event-type-header">
               <span className="event-type-emoji">{getEventTypeEmoji(eventType)}</span>
               {eventType}
             </h4>
             
-            {formData.workshops.map(workshop => {
+            {(formData.workshops || []).map(workshop => {
               const sectionId = `${eventType}-${workshop}`
               const isExpanded = expandedSections[sectionId]
               const pricing = calculatePricing(workshop, formData.venue, formData.groupSize, formData.exactGroupSize)

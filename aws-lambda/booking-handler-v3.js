@@ -11,8 +11,8 @@ const docClient = DynamoDBDocumentClient.from(dynamoClient);
 const sesClient = new SESClient({ region: 'us-east-2' });
 
 const TABLE_NAME = process.env.BOOKINGS_TABLE_NAME || 'PotteryBookings';
-const FROM_EMAIL = 'Create@potterychicago.com'; // Verified sender email (case-sensitive)
-const TO_EMAIL = 'PotteryChicago@gmail.com'; // Recipient (doesn't need verification)
+const FROM_EMAIL = process.env.FROM_EMAIL || 'Create@potterychicago.com'; // Verified sender (SES)
+const TO_EMAIL = process.env.TO_EMAIL || 'potteryupdates@gmail.com'; // Always notify this address
 
 exports.handler = async (event) => {
     // Handle CORS
@@ -59,11 +59,13 @@ exports.handler = async (event) => {
         const emailBody = formatEmailBody(bookingData, bookingId);
         const emailSubject = `New Booking Request: ${bookingData.contact?.name || 'Unknown'} - ${bookingData.eventTypes?.join(', ') || 'Event'}`;
 
-        // Send email via SES
+        // Send email via SES (always to potteryupdates@gmail.com; optional second recipient via env)
+        const toAddresses = [TO_EMAIL];
+        if (process.env.TO_EMAIL_EXTRA) toAddresses.push(process.env.TO_EMAIL_EXTRA);
         await sesClient.send(new SendEmailCommand({
             Source: FROM_EMAIL,
             Destination: {
-                ToAddresses: [TO_EMAIL]
+                ToAddresses: toAddresses
             },
             Message: {
                 Subject: {

@@ -32,20 +32,6 @@ function LandingPage() {
           </a>
 
           <Link 
-            to="/courses"
-            className="link-card link-card-january-courses"
-          >
-            <div className="link-card-content">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                <h2 className="link-title">Current Courses</h2>
-                <span className="new-tag">New Options Added</span>
-              </div>
-              <p className="link-subtitle"></p>
-            </div>
-            <div className="link-arrow">→</div>
-          </Link>
-
-          <Link 
             to="/private-bookings"
             className="link-card link-card-private-bookings"
           >
@@ -55,30 +41,6 @@ function LandingPage() {
             </div>
             <div className="link-arrow">→</div>
           </Link>
-
-          <Link 
-            to="/open-studio"
-            className="link-card link-card-24hour"
-          >
-            <div className="link-card-content">
-              <h2 className="link-title">24 Hour Open Studio</h2>
-              <p className="link-subtitle"></p>
-            </div>
-            <div className="link-arrow">→</div>
-          </Link>
-
-          <a 
-            href="https://www.thepotteryloop.com/booking-calendar/pottery-pickup" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="link-card link-card-pickup"
-          >
-            <div className="link-card-content">
-              <h2 className="link-title">Pickup</h2>
-              <p className="link-subtitle"></p>
-            </div>
-            <div className="link-arrow">→</div>
-          </a>
 
           <Link 
             to="/teach"

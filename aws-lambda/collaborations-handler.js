@@ -11,7 +11,7 @@ const sesClient = new SESClient({ region: 'us-east-2' });
 
 const TABLE_NAME = process.env.COLLABORATIONS_TABLE_NAME || 'Collaborations';
 const FROM_EMAIL = 'Create@potterychicago.com'; // Verified sender email (case-sensitive)
-const TO_EMAIL = 'PotteryChicago@gmail.com';
+const TO_EMAIL = process.env.TO_EMAIL || 'potteryupdates@gmail.com';
 
 exports.handler = async (event) => {
     const headers = {
