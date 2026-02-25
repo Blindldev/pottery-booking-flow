@@ -327,21 +327,31 @@ function BookingFlow() {
         return
       }
 
-      const response = await fetch(API_URL, {
+      let response = await fetch(API_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(submissionData)
       })
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
-        throw new Error(errorData.message || `Server error: ${response.status}`)
+      // Retry once on server error (transient failure)
+      if (response.status >= 500) {
+        await new Promise(r => setTimeout(r, 2000))
+        response = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(submissionData)
+        })
       }
 
-      const result = await response.json()
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        const msg = errorData.message || `Server error: ${response.status}`
+        throw new Error(msg === 'Failed to process booking'
+          ? 'We couldn’t save your booking. Please try again or email potteryupdates@gmail.com with your event details.'
+          : msg)
+      }
 
+      await response.json()
       setIsSubmitted(true)
 
       try {

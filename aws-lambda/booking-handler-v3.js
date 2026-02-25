@@ -33,57 +33,68 @@ exports.handler = async (event) => {
     }
 
     try {
-        // Parse request body (handle both API Gateway v1 and v2 formats)
-        const body = typeof event.body === 'string' ? JSON.parse(event.body) : event.body;
-        const bookingData = body;
-        
-        // Generate unique booking ID
+        // Parse request body (API Gateway v1/v2, optional base64)
+        let bookingData;
+        try {
+            let rawBody = event.body;
+            if (event.isBase64Encoded && typeof rawBody === 'string') {
+                rawBody = Buffer.from(rawBody, 'base64').toString('utf8');
+            }
+            if (typeof rawBody === 'string') {
+                bookingData = rawBody ? JSON.parse(rawBody) : {};
+            } else if (rawBody && typeof rawBody === 'object') {
+                bookingData = rawBody;
+            } else {
+                bookingData = {};
+            }
+        } catch (parseErr) {
+            console.error('Body parse error:', parseErr);
+            return {
+                statusCode: 400,
+                headers,
+                body: JSON.stringify({ success: false, message: 'Invalid request body' })
+            };
+        }
+
         const bookingId = `BK-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
         const timestamp = new Date().toISOString();
 
-        // Prepare data for DynamoDB
-        const dbItem = {
+        // Build DynamoDB item (strip undefined so DynamoDB is happy)
+        const dbItem = sanitizeForDynamoDB({
             bookingId,
             timestamp,
             ...bookingData,
             status: 'pending'
-        };
+        });
 
-        // Store in DynamoDB
+        // Store in DynamoDB first (source of truth)
         await docClient.send(new PutCommand({
             TableName: TABLE_NAME,
             Item: dbItem
         }));
 
-        // Format email content
-        const emailBody = formatEmailBody(bookingData, bookingId);
-        const emailSubject = `New Booking Request: ${bookingData.contact?.name || 'Unknown'} - ${bookingData.eventTypes?.join(', ') || 'Event'}`;
-
-        // Send email via SES (always to potteryupdates@gmail.com; optional second recipient via env)
-        const toAddresses = [TO_EMAIL];
-        if (process.env.TO_EMAIL_EXTRA) toAddresses.push(process.env.TO_EMAIL_EXTRA);
-        await sesClient.send(new SendEmailCommand({
-            Source: FROM_EMAIL,
-            Destination: {
-                ToAddresses: toAddresses
-            },
-            Message: {
-                Subject: {
-                    Data: emailSubject,
-                    Charset: 'UTF-8'
-                },
-                Body: {
-                    Html: {
-                        Data: emailBody,
-                        Charset: 'UTF-8'
-                    },
-                    Text: {
-                        Data: formatEmailBodyText(bookingData, bookingId),
-                        Charset: 'UTF-8'
+        // Send email (best-effort: don't fail the request if email fails)
+        let emailSent = false;
+        try {
+            const emailBody = formatEmailBody(bookingData, bookingId);
+            const emailSubject = `New Booking Request: ${bookingData.contact?.name || 'Unknown'} - ${(bookingData.eventTypes || []).join(', ') || 'Event'}`;
+            const toAddresses = [TO_EMAIL];
+            if (process.env.TO_EMAIL_EXTRA) toAddresses.push(process.env.TO_EMAIL_EXTRA);
+            await sesClient.send(new SendEmailCommand({
+                Source: FROM_EMAIL,
+                Destination: { ToAddresses: toAddresses },
+                Message: {
+                    Subject: { Data: emailSubject, Charset: 'UTF-8' },
+                    Body: {
+                        Html: { Data: emailBody, Charset: 'UTF-8' },
+                        Text: { Data: formatEmailBodyText(bookingData, bookingId), Charset: 'UTF-8' }
                     }
                 }
-            }
-        }));
+            }));
+            emailSent = true;
+        } catch (emailErr) {
+            console.error('Email send failed (booking saved):', emailErr);
+        }
 
         return {
             statusCode: 200,
@@ -91,10 +102,10 @@ exports.handler = async (event) => {
             body: JSON.stringify({
                 success: true,
                 message: 'Booking submitted successfully',
-                bookingId
+                bookingId,
+                emailSent
             })
         };
-
     } catch (error) {
         console.error('Error processing booking:', error);
         return {
@@ -102,20 +113,33 @@ exports.handler = async (event) => {
             headers,
             body: JSON.stringify({
                 success: false,
-                message: 'Failed to process booking',
-                error: error.message
+                message: 'We couldn’t save your booking. Please try again or email potteryupdates@gmail.com with your event details.'
             })
         };
     }
 };
 
+function sanitizeForDynamoDB(obj) {
+    if (obj === null || obj === undefined) return undefined;
+    if (Array.isArray(obj)) return obj.map(sanitizeForDynamoDB).filter(v => v !== undefined);
+    if (typeof obj === 'object') {
+        const out = {};
+        for (const [k, v] of Object.entries(obj)) {
+            if (v === undefined) continue;
+            const s = sanitizeForDynamoDB(v);
+            if (s !== undefined) out[k] = s;
+        }
+        return out;
+    }
+    return obj;
+}
+
 function formatEmailBody(bookingData, bookingId) {
     const contact = bookingData.contact || {};
     const eventTypes = bookingData.eventTypes || [];
-    const workshops = bookingData.workshops || [];
     const dates = bookingData.dates || [];
-    const workshopEstimates = bookingData.workshopEstimates || [];
-    const totalEstimate = bookingData.totalEstimate || 0;
+    const workshopEstimates = Array.isArray(bookingData.workshopEstimates) ? bookingData.workshopEstimates : [];
+    const totalEstimate = Number(bookingData.totalEstimate) || 0;
 
     let workshopsHtml = '';
     workshopEstimates.forEach(est => {
@@ -191,7 +215,7 @@ function formatEmailBody(bookingData, bookingId) {
                     
                     <div class="section">
                         <h2>Pricing Summary</h2>
-                        <p><span class="label">Total Estimate:</span> $${totalEstimate.toLocaleString()}</p>
+                        <p><span class="label">Total Estimate:</span> $${(totalEstimate || 0).toLocaleString()}</p>
                     </div>
                     
                     <div class="section">
@@ -210,10 +234,9 @@ function formatEmailBody(bookingData, bookingId) {
 function formatEmailBodyText(bookingData, bookingId) {
     const contact = bookingData.contact || {};
     const eventTypes = bookingData.eventTypes || [];
-    const workshops = bookingData.workshops || [];
     const dates = bookingData.dates || [];
-    const workshopEstimates = bookingData.workshopEstimates || [];
-    const totalEstimate = bookingData.totalEstimate || 0;
+    const workshopEstimates = Array.isArray(bookingData.workshopEstimates) ? bookingData.workshopEstimates : [];
+    const totalEstimate = Number(bookingData.totalEstimate) || 0;
 
     let text = `New Booking Request\n`;
     text += `Booking ID: ${bookingId}\n\n`;
@@ -241,7 +264,7 @@ function formatEmailBodyText(bookingData, bookingId) {
         if (est.readinessNote) text += `    Readiness: ${est.readinessNote}\n`;
     });
     text += `\nPricing Summary:\n`;
-    text += `  Total Estimate: $${totalEstimate.toLocaleString()}\n`;
+    text += `  Total Estimate: $${(totalEstimate || 0).toLocaleString()}\n`;
     text += `\nSubmitted At: ${new Date(bookingData.submittedAt || Date.now()).toLocaleString()}\n`;
     
     return text;
