@@ -19,62 +19,66 @@ const STEPS = [
   { id: 'review', title: '✨ Final Review', emoji: '✨', component: ReviewStep },
 ]
 
+const DEFAULT_FORM_DATA = {
+  eventTypes: [],
+  groupSize: 8,
+  exactGroupSize: null,
+  venue: '',
+  workshops: [],
+  dates: [],
+  flexibleDates: null,
+  timeslots: [],
+  specificTime: '',
+  contact: {
+    name: '',
+    phone: '',
+    email: '',
+    notes: ''
+  },
+  agreement: false
+}
+
+// Normalize form data so restored state never has wrong shape or types (avoids API/Lambda issues)
+function normalizeFormData(loaded) {
+  if (!loaded || typeof loaded !== 'object') return { ...DEFAULT_FORM_DATA }
+  const c = loaded.contact && typeof loaded.contact === 'object' ? loaded.contact : {}
+  return {
+    eventTypes: Array.isArray(loaded.eventTypes) ? loaded.eventTypes : [],
+    groupSize: typeof loaded.groupSize === 'number' ? loaded.groupSize : 8,
+    exactGroupSize: loaded.exactGroupSize != null ? loaded.exactGroupSize : null,
+    venue: typeof loaded.venue === 'string' ? loaded.venue : '',
+    workshops: Array.isArray(loaded.workshops) ? loaded.workshops : [],
+    dates: Array.isArray(loaded.dates) ? loaded.dates : [],
+    flexibleDates: loaded.flexibleDates != null ? loaded.flexibleDates : null,
+    timeslots: Array.isArray(loaded.timeslots) ? loaded.timeslots : [],
+    specificTime: typeof loaded.specificTime === 'string' ? loaded.specificTime : '',
+    contact: {
+      name: typeof c.name === 'string' ? c.name : '',
+      phone: typeof c.phone === 'string' ? c.phone : '',
+      email: typeof c.email === 'string' ? c.email : '',
+      notes: typeof c.notes === 'string' ? c.notes : ''
+    },
+    agreement: Boolean(loaded.agreement)
+  }
+}
+
 function BookingFlow() {
-  // Load saved state from localStorage on component mount
-  // Note: isSubmitted is never loaded from localStorage to prevent showing success message from previous sessions
   const getSavedState = () => {
     try {
       const savedStep = localStorage.getItem('bookingFlow_currentStep')
       const savedFormData = localStorage.getItem('bookingFlow_formData')
       const savedErrors = localStorage.getItem('bookingFlow_errors')
-      
-      return {
-        currentStep: savedStep ? parseInt(savedStep) : 0,
-        formData: savedFormData ? JSON.parse(savedFormData) : {
-          eventTypes: [],
-          groupSize: 8,
-          exactGroupSize: null,
-          venue: '',
-          workshops: [],
-          dates: [],
-          flexibleDates: null,
-          timeslots: [],
-          specificTime: '',
-          contact: {
-            name: '',
-            phone: '',
-            email: '',
-            notes: ''
-          },
-          agreement: false
-        },
-        errors: savedErrors ? JSON.parse(savedErrors) : {}
-      }
-    } catch (error) {
-      console.warn('Error loading saved state:', error)
-      // Return default state if there's an error
-      return {
-        currentStep: 0,
-        formData: {
-          eventTypes: [],
-          groupSize: 8,
-          exactGroupSize: null,
-          venue: '',
-          workshops: [],
-          dates: [],
-          flexibleDates: null,
-          timeslots: [],
-          specificTime: '',
-          contact: {
-            name: '',
-            phone: '',
-            email: '',
-            notes: ''
-          },
-          agreement: false
-        },
-        errors: {}
-      }
+      const step = savedStep ? parseInt(savedStep, 10) : 0
+      const formData = savedFormData ? normalizeFormData(JSON.parse(savedFormData)) : { ...DEFAULT_FORM_DATA }
+      const errors = savedErrors ? (() => {
+        try {
+          const e = JSON.parse(savedErrors)
+          return typeof e === 'object' && e !== null ? e : {}
+        } catch (e) { return {} }
+        })() : {}
+      return { currentStep: Math.min(Math.max(0, step), STEPS.length - 1), formData, errors }
+    } catch {
+      return { currentStep: 0, formData: { ...DEFAULT_FORM_DATA }, errors: {} }
     }
   }
 
@@ -114,41 +118,37 @@ function BookingFlow() {
     }
   }
 
-  // Detect if this is a page refresh (not initial load)
-  useEffect(() => {
-    const isRefresh = performance.navigation?.type === 1 || 
-                     performance.getEntriesByType('navigation')[0]?.type === 'reload'
-    
-    if (isRefresh) {
-      console.log('Page refreshed - restored saved state')
-    }
-  }, [])
 
-  // Auto-save state whenever formData, currentStep, errors, or isSubmitted changes
+  // Debounced save so we don't persist broken or mid-edit state
   useEffect(() => {
-    // Skip saving on initial mount (state is already loaded from localStorage)
-    const isInitialMount = currentStep === 0 && 
-                          (!formData.eventTypes || formData.eventTypes.length === 0) && 
-                          !formData.contact.name &&
-                          !formData.venue
-    
-    if (isInitialMount) {
-      return
-    }
-    
-    saveState(formData, currentStep, errors, isSubmitted)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const isInitialMount = currentStep === 0 &&
+      (!formData.eventTypes || formData.eventTypes.length === 0) &&
+      !formData.contact?.name &&
+      !formData.venue
+    if (isInitialMount) return
+
+    const t = setTimeout(() => {
+      try {
+        const toSave = normalizeFormData(formData)
+        localStorage.setItem('bookingFlow_formData', JSON.stringify(toSave))
+        localStorage.setItem('bookingFlow_currentStep', String(currentStep))
+        localStorage.setItem('bookingFlow_errors', JSON.stringify(errors))
+        localStorage.setItem('bookingFlow_isSubmitted', String(isSubmitted))
+      } catch (e) {
+        console.warn('Save state failed:', e)
+      }
+    }, 400)
+    return () => clearTimeout(t)
   }, [formData, currentStep, errors, isSubmitted])
 
-  // Save state to localStorage
   const saveState = (newFormData, newCurrentStep, newErrors, newIsSubmitted) => {
     try {
-      localStorage.setItem('bookingFlow_formData', JSON.stringify(newFormData))
-      localStorage.setItem('bookingFlow_currentStep', newCurrentStep.toString())
-      localStorage.setItem('bookingFlow_errors', JSON.stringify(newErrors))
-      localStorage.setItem('bookingFlow_isSubmitted', newIsSubmitted.toString())
-    } catch (error) {
-      console.warn('Error saving state:', error)
+      localStorage.setItem('bookingFlow_formData', JSON.stringify(normalizeFormData(newFormData)))
+      localStorage.setItem('bookingFlow_currentStep', String(newCurrentStep))
+      localStorage.setItem('bookingFlow_errors', JSON.stringify(newErrors || {}))
+      localStorage.setItem('bookingFlow_isSubmitted', String(newIsSubmitted))
+    } catch (e) {
+      console.warn('Error saving state:', e)
     }
   }
 
@@ -277,8 +277,8 @@ function BookingFlow() {
   }
 
   const submitForm = async () => {
-    const finalErrors = validateStep('review', formData)
-
+    const normalized = normalizeFormData(formData)
+    const finalErrors = validateStep('review', normalized)
     if (Object.keys(finalErrors).length > 0) {
       setErrors(finalErrors)
       return
@@ -287,32 +287,28 @@ function BookingFlow() {
     setIsSubmitting(true)
     setErrors({})
 
-    // Calculate estimates for all selected workshops
-    const workshopEstimates = formData.workshops.map(workshop => {
-      const pricing = calculatePricing(workshop, formData.venue, formData.groupSize, formData.exactGroupSize)
-      return {
-        workshop,
-        ...pricing
-      }
+    const workshops = normalized.workshops || []
+    const workshopEstimates = workshops.map(workshop => {
+      const pricing = calculatePricing(workshop, normalized.venue, normalized.groupSize, normalized.exactGroupSize)
+      return { workshop, ...pricing }
     })
-    
     const totalEstimate = workshopEstimates.reduce((sum, est) => sum + est.total, 0)
-    
-    // Prepare submission data
+
+    // Build payload from normalized data only (no raw state) so API always gets clean, serializable JSON
     const submissionData = {
-      eventTypes: formData.eventTypes,
-      groupSize: formData.groupSize,
-      exactGroupSize: formData.exactGroupSize,
-      venue: formData.venue,
-      workshops: formData.workshops,
-          dates: formData.dates,
-          flexibleDates: formData.flexibleDates,
-          timeslots: formData.timeslots || [],
-          specificTime: formData.specificTime || '',
-          contact: formData.contact,
-          workshopEstimates,
-          totalEstimate,
-          submittedAt: new Date().toISOString()
+      eventTypes: normalized.eventTypes,
+      groupSize: normalized.groupSize,
+      exactGroupSize: normalized.exactGroupSize,
+      venue: normalized.venue,
+      workshops,
+      dates: normalized.dates,
+      flexibleDates: normalized.flexibleDates,
+      timeslots: normalized.timeslots,
+      specificTime: normalized.specificTime,
+      contact: { ...normalized.contact },
+      workshopEstimates,
+      totalEstimate,
+      submittedAt: new Date().toISOString()
     }
     
     try {
@@ -378,22 +374,7 @@ function BookingFlow() {
     clearSavedState()
     setIsSubmitted(false)
     setCurrentStep(0)
-    setFormData({
-      eventTypes: [],
-      groupSize: 8,
-      exactGroupSize: null,
-      venue: '',
-      workshops: [],
-      dates: [],
-      flexibleDates: null,
-      contact: {
-        name: '',
-        phone: '',
-        email: '',
-        notes: ''
-      },
-      agreement: false
-    })
+    setFormData({ ...DEFAULT_FORM_DATA })
     setErrors({})
   }
 
