@@ -12,7 +12,8 @@ const sesClient = new SESClient({ region: 'us-east-2' });
 
 const TABLE_NAME = process.env.BOOKINGS_TABLE_NAME || 'PotteryBookings';
 const FROM_EMAIL = process.env.FROM_EMAIL || 'Create@potterychicago.com'; // Verified sender (SES)
-const TO_EMAIL = process.env.TO_EMAIL || 'potteryupdates@gmail.com'; // Always notify this address
+// Both addresses must receive every booking notification
+const NOTIFY_EMAILS = ['potteryupdates@gmail.com', 'PotteryChicago@gmail.com'];
 
 exports.handler = async (event) => {
     // Handle CORS
@@ -78,7 +79,7 @@ exports.handler = async (event) => {
         try {
             const emailBody = formatEmailBody(bookingData, bookingId);
             const emailSubject = `New Booking Request: ${bookingData.contact?.name || 'Unknown'} - ${(bookingData.eventTypes || []).join(', ') || 'Event'}`;
-            const toAddresses = [TO_EMAIL];
+            const toAddresses = [...NOTIFY_EMAILS];
             if (process.env.TO_EMAIL_EXTRA) toAddresses.push(process.env.TO_EMAIL_EXTRA);
             await sesClient.send(new SendEmailCommand({
                 Source: FROM_EMAIL,

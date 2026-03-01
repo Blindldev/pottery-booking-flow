@@ -11,7 +11,7 @@ const sesClient = new SESClient({ region: 'us-east-2' });
 
 const TABLE_NAME = process.env.INSTRUCTOR_TABLE_NAME || 'InstructorApplications';
 const FROM_EMAIL = 'Create@potterychicago.com'; // Verified sender email (case-sensitive)
-const TO_EMAIL = process.env.TO_EMAIL || 'potteryupdates@gmail.com';
+const NOTIFY_EMAILS = ['potteryupdates@gmail.com', 'PotteryChicago@gmail.com'];
 
 exports.handler = async (event) => {
     const headers = {
@@ -53,9 +53,7 @@ exports.handler = async (event) => {
 
         await sesClient.send(new SendEmailCommand({
             Source: FROM_EMAIL,
-            Destination: {
-                ToAddresses: [TO_EMAIL]
-            },
+            Destination: { ToAddresses: NOTIFY_EMAILS },
             Message: {
                 Subject: {
                     Data: emailSubject,

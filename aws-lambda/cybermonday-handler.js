@@ -12,7 +12,7 @@ const sesClient = new SESClient({ region: 'us-east-2' });
 
 const TABLE_NAME = process.env.CYBERMONDAY_TABLE_NAME || 'CyberMondayGamePlays';
 const FROM_EMAIL = 'The Pottery Loop <Create@potterychicago.com>'; // Verified sender email (case-sensitive)
-const ADMIN_EMAIL = process.env.TO_EMAIL || 'potteryupdates@gmail.com'; // Notify on every form submission
+const ADMIN_NOTIFY_EMAILS = ['potteryupdates@gmail.com', 'PotteryChicago@gmail.com'];
 const BOOKINGS_URL = process.env.BOOKINGS_URL || 'https://ThePotteryLoop.com';
 
 // Cyber Monday offers
@@ -188,12 +188,12 @@ exports.handler = async (event) => {
       }
     }));
 
-    // Notify admin so every form submission is sent to potteryupdates@gmail.com
+    // Notify both addresses on every spin
     const adminSubject = `Cyber Monday spin: ${name} - ${offer.code}`;
     const adminText = `Name: ${name}\nEmail: ${email}\nOffer: ${offer.label}\nCode: ${offer.code}\nTime: ${new Date().toISOString()}`;
     await sesClient.send(new SendEmailCommand({
       Source: FROM_EMAIL,
-      Destination: { ToAddresses: [ADMIN_EMAIL] },
+      Destination: { ToAddresses: ADMIN_NOTIFY_EMAILS },
       Message: {
         Subject: { Data: adminSubject, Charset: 'UTF-8' },
         Body: {

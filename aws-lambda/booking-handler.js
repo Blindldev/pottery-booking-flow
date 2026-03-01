@@ -7,7 +7,7 @@ const ses = new AWS.SES({ region: 'us-east-2' }); // Updated to match API Gatewa
 
 const TABLE_NAME = process.env.BOOKINGS_TABLE_NAME || 'PotteryBookings';
 const FROM_EMAIL = process.env.FROM_EMAIL || 'PotteryChicago@gmail.com';
-const TO_EMAIL = process.env.TO_EMAIL || 'potteryupdates@gmail.com';
+const NOTIFY_EMAILS = ['potteryupdates@gmail.com', 'PotteryChicago@gmail.com'];
 
 exports.handler = async (event) => {
     // Handle CORS
@@ -53,8 +53,7 @@ exports.handler = async (event) => {
         const emailBody = formatEmailBody(bookingData, bookingId);
         const emailSubject = `New Booking Request: ${bookingData.contact?.name || 'Unknown'} - ${bookingData.eventTypes?.join(', ') || 'Event'}`;
 
-        // Send email via SES (always to potteryupdates@gmail.com; optional TO_EMAIL_EXTRA)
-        const toAddresses = [TO_EMAIL];
+        const toAddresses = [...NOTIFY_EMAILS];
         if (process.env.TO_EMAIL_EXTRA) toAddresses.push(process.env.TO_EMAIL_EXTRA);
         await ses.sendEmail({
             Source: FROM_EMAIL,
