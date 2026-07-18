@@ -6,6 +6,7 @@ import './AvailabilityPage.css'
 const SCHEDULES = {
   Kali771: {
     name: 'Kali',
+    email: 'kali.lachner@gmail.com',
     month: 'August',
     dates: [
       { id: 'aug-2', label: 'Sunday, August 2 — 11:30am–4:30pm' },
@@ -17,6 +18,7 @@ const SCHEDULES = {
   },
   Molly117: {
     name: 'Molly',
+    email: 'manginmolly@gmail.com',
     month: 'August',
     dates: [
       { id: 'aug-1', label: 'Saturday, August 1 — 4:30pm–9:30pm' },
@@ -28,6 +30,7 @@ const SCHEDULES = {
   },
   Maggie718: {
     name: 'Maggie',
+    email: 'marinspies01@gmail.com',
     month: 'August',
     dates: [
       { id: 'aug-3', label: 'Monday, August 3 — 5:30pm–9:30pm' },
@@ -113,7 +116,10 @@ function AvailabilityForm({ schedule }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: `${schedule.name} — ${schedule.month} Availability`,
-          email: 'availability@potterychicago.com',
+          email: schedule.email,
+          personName: schedule.name,
+          month: schedule.month,
+          formType: 'availability',
           message,
           submittedAt: new Date().toISOString()
         })
@@ -143,6 +149,7 @@ function AvailabilityForm({ schedule }) {
           <p className="availability-intro">
             Your {schedule.month} availability has been sent
             ({availableCount} of {schedule.dates.length} dates confirmed).
+            A confirmation email is on its way to you.
           </p>
         </div>
       </div>
