@@ -1,0 +1,117 @@
+.availability-container {
+  min-height: 100vh;
+  background: var(--color-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.availability-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+  padding: 2.5rem;
+  max-width: 560px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.availability-card h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin: 0 0 1rem 0;
+  text-align: center;
+}
+
+.availability-intro {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  margin: 0 0 2rem 0;
+  line-height: 1.6;
+}
+
+.availability-dates {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.availability-date {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  background: transparent;
+}
+
+.availability-date.is-checked {
+  border-color: var(--color-accent-primary);
+  background: rgba(176, 125, 98, 0.08);
+  color: var(--color-text-main);
+}
+
+.availability-date input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-accent-primary);
+  flex-shrink: 0;
+}
+
+.availability-error {
+  color: #c0392b;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.availability-submit {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 12px;
+  background: var(--color-accent-primary);
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.availability-submit:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.availability-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.availability-note {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  margin: 0.75rem 0 0 0;
+}
+
+.availability-success-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--color-accent-primary);
+  color: #fff;
+  font-size: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem auto;
+}

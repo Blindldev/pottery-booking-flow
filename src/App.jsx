@@ -10,6 +10,7 @@ import JanuaryCourses from './components/JanuaryCourses'
 import Courses from './components/Courses'
 import DiscountPage from './components/DiscountPage'
 import CyberMonday from './components/CyberMonday'
+import AvailabilityPage from './components/AvailabilityPage'
 import './App.css'
 
 function BookingPage() {
@@ -93,6 +94,7 @@ function App() {
       <Route path="/collaborations" element={<CollaborationsPage />} />
       <Route path="/contact" element={<ContactPageWrapper />} />
       <Route path="/discount" element={<DiscountPageWrapper />} />
+      <Route path="/availability/:slug" element={<AvailabilityPage />} />
       {/* Cyber Monday route removed - keeping component for future reference
       <Route path="/cybermonday" element={<CyberMondayPage />} />
       */}
